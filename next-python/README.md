@@ -1,0 +1,2 @@
+# template
+next-go template
