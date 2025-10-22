@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  go-app:
+    container_name: go
+    build:
+      context: ./go-app
+      dockerfile: ../docker/Dockerfile.backend
+    ports:
+      - "${GO_APP_PORT:-8080}:8080"
+    environment:
+      - PORT=8080
+      - DB_HOST=next-go-db
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_NAME=${DB_NAME:-next-go-sample-db}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+    depends_on:
+      - db
+
+  next-app:
+    container_name: next
+    build:
+      context: ./next-app
+      dockerfile: ../docker/Dockerfile.frontend
+    ports:
+      - "${NEXT_APP_PORT:-3000}:3000"
+    volumes:
+      - ./next-app:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:${GO_APP_PORT:-8080}
+
+  db:
+    container_name: next-go-db
+    image: postgres:15-alpine
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-next-go-sample-db}
+    volumes:
+      - next-go-sample-db_data:/var/lib/postgresql/data
+      - ./DB/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  next-go-sample-db_data:
