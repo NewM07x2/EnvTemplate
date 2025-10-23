@@ -192,8 +192,11 @@ python main.py
 
 ```bash
 # .env.dockerファイルを編集 (必要に応じて)
+#  キャッシュを削除してビルト
+docker-compose build --no-cache
+
 # Docker Composeでサービスを起動
-docker-compose up -d
+docker-compose up --build -d
 
 # ログの確認
 docker-compose logs -f app
@@ -218,10 +221,10 @@ docker-compose down
 
 ```bash
 # ヘルスチェック
-GET http://localhost:8000/health
+curl http://localhost:8000/health
 
 # ユーザー一覧取得
-GET http://localhost:8000/api/v1/users
+curl http://localhost:8000/api/v1/users
 
 # ユーザー作成
 POST http://localhost:8000/api/v1/users
