@@ -30,10 +30,10 @@ async def test_health_check() -> None:
 
 
 @pytest.mark.asyncio
-async def test_api_v1_health_check() -> None:
-    """Test API v1 health check endpoint."""
+async def test_api_health_check() -> None:
+    """Test API health check endpoint."""
     async with AsyncClient(app=app, base_url="http://test") as client:
-        response = await client.get("/api/v1/health")
+        response = await client.get("/api/health")
         assert response.status_code == 200
         assert response.json()["status"] == "healthy"
 
@@ -42,6 +42,6 @@ async def test_api_v1_health_check() -> None:
 async def test_ping() -> None:
     """Test ping endpoint."""
     async with AsyncClient(app=app, base_url="http://test") as client:
-        response = await client.get("/api/v1/ping")
+        response = await client.get("/api/ping")
         assert response.status_code == 200
         assert response.json()["message"] == "pong"

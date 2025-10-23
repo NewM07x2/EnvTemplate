@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
 
-from app.api.v1 import api_router
+from app.api import api_router
 from app.core.config import settings
 from app.core.database import prisma
 from app.graphql.schema import graphql_schema
@@ -54,7 +54,7 @@ app.add_middleware(TimingMiddleware)
 app.add_middleware(LoggingMiddleware)
 
 # Include REST API routes
-app.include_router(api_router, prefix="/api/v1")
+app.include_router(api_router, prefix="/api")
 
 # Include GraphQL endpoint
 graphql_app = GraphQLRouter(graphql_schema)

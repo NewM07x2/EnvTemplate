@@ -63,10 +63,8 @@ python/FastAPI/
 │   ├── __init__.py
 │   ├── api/                    # APIエンドポイント
 │   │   ├── __init__.py
-│   │   └── v1/                 # API v1
-│   │       ├── __init__.py
-│   │       ├── health.py       # ヘルスチェックエンドポイント
-│   │       └── sample_endpoints.py  # サンプルエンドポイント (コピーして使用)
+│   │   ├── health.py           # ヘルスチェックエンドポイント
+│   │   └── sample_endpoints.py # サンプルエンドポイント (コピーして使用)
 │   ├── core/                   # コア機能
 │   │   ├── __init__.py
 │   │   ├── config.py           # 設定管理
@@ -224,10 +222,10 @@ docker-compose down
 curl http://localhost:8000/health
 
 # ユーザー一覧取得
-curl http://localhost:8000/api/v1/users
+curl http://localhost:8000/api/users
 
 # ユーザー作成
-POST http://localhost:8000/api/v1/users
+POST http://localhost:8000/api/users
 Content-Type: application/json
 
 {
@@ -285,10 +283,10 @@ mutation {
    - `sample_service.py` をコピーしてビジネスロジックを実装
    - バリデーション、権限チェックなどを実装
 
-4. **エンドポイント作成** (`app/api/v1/`)
+4. **エンドポイント作成** (`app/api/`)
    - `sample_endpoints.py` をコピーして新しいエンドポイントファイルを作成
    - FastAPIのルーターを使用してエンドポイントを定義
-   - `app/api/v1/__init__.py` でルーターを登録
+   - `app/api/__init__.py` でルーターを登録
 
 ### GraphQLの追加
 
