@@ -256,3 +256,17 @@ File "/usr/local/lib/python3.12/multiprocessing/process.py", line 108, in run
 
 
 self._target(*self._args, **self._kwargs)
+
+
+# 再ビルドして起動（最も簡単）
+docker-compose up -d --build
+docker-compose logs -f app
+
+
+# .env ファイルが /app/.env にある想定で確認
+docker-compose exec app cat /app/.env
+
+# 環境変数の現状を確認
+docker-compose exec app env | Select-String ALLOWED_ORIGINS
+
+docker-compose up -d --build

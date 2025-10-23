@@ -39,15 +39,17 @@ class Settings(BaseSettings):
     )
 
     # CORS
-    ALLOWED_ORIGINS: list[str] = Field(
+    # Use Any here so pydantic_settings won't attempt to json-decode complex
+    # values (which raises when env var is an empty string). We parse in validators.
+    ALLOWED_ORIGINS: Any = Field(
         default=["http://localhost:3000", "http://localhost:8000"],
         description="Allowed origins for CORS",
     )
-    ALLOWED_METHODS: list[str] = Field(
+    ALLOWED_METHODS: Any = Field(
         default=["GET", "POST", "PUT", "DELETE", "PATCH"],
         description="Allowed methods for CORS",
     )
-    ALLOWED_HEADERS: list[str] = Field(
+    ALLOWED_HEADERS: Any = Field(
         default=["*"],
         description="Allowed headers for CORS",
     )
