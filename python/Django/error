@@ -1,96 +1,4 @@
-django_celery_worker
-Waiting for PostgreSQL...
-db:5432 - accepting connections
-PostgreSQL is ready!
-Running migrations...
-Operations to perform:
-Apply all migrations: admin, auth, contenttypes, debug_toolbar, django_celery_beat, sessions
-Running migrations:
-Traceback (most recent call last):
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 103, in _execute
-return self.cursor.execute(sql)
-^^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.DuplicateTable: relation "django_content_type" already exists
-The above exception was the direct cause of the following exception:
-Traceback (most recent call last):
-File "/app/manage.py", line 22, in <module>
-main()
-File "/app/manage.py", line 18, in main
-execute_from_command_line(sys.argv)
-File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
-utility.execute()
-File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
-self.fetch_command(subcommand).run_from_argv(self.argv)
-File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 416, in run_from_argv
-self.execute(*args, **cmd_options)
-File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 460, in execute
-output = self.handle(*args, **options)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 107, in wrapper
-res = handle_func(*args, **kwargs)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 353, in handle
-post_migrate_state = executor.migrate(
-^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 135, in migrate
-state = self._migrate_all_forwards(
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 167, in _migrate_all_forwards
-state = self.apply_migration(
-^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 255, in apply_migration
-state = migration.apply(state, schema_editor)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
 django_app
-Exited (1) (1 minute ago)
-output = self.handle(*args, **options)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 107, in wrapper
-res = handle_func(*args, **kwargs)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 353, in handle
-post_migrate_state = executor.migrate(
-^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 135, in migrate
-state = self._migrate_all_forwards(
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 167, in _migrate_all_forwards
-state = self.apply_migration(
-^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 252, in apply_migration
-with self.connection.schema_editor(
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 169, in __exit__
-self.execute(sql, None)
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py", line 45, in execute
-return super().execute(sql, params)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 204, in execute
-cursor.execute(sql, params)
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
-return super().execute(sql, params)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
-return self._execute_with_wrappers(
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
-return executor(sql, params, many, context)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
-with self.db.wrap_database_errors:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "/usr/local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
-raise dj_exc_value.with_traceback(traceback) from exc_value
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 103, in _execute
-return self.cursor.execute(sql)
-^^^^^^^^^^^^^^^^^^^^^^^
-django.db.utils.ProgrammingError: relation "users_user" does not exist
-Applying admin.0001_initial...
-
-
-django_celery_beat
 Waiting for PostgreSQL...
 
 
@@ -100,13 +8,145 @@ db:5432 - accepting connections
 PostgreSQL is ready!
 
 
+Creating migrations...
+
+
+Migrations for 'posts':
+
+
+apps/posts/migrations/0002_alter_category_options_alter_post_options_and_more.py
+
+
+~ Change Meta options on category
+
+
+~ Change Meta options on post
+
+
++ Add field likes_count to post
+
+
++ Add field views_count to post
+
+
+~ Alter field created_at on category
+
+
+~ Alter field description on category
+
+
+~ Alter field name on category
+
+
+~ Alter field slug on category
+
+
+~ Alter field updated_at on category
+
+
+~ Alter field author on post
+
+
+~ Alter field category on post
+
+
+~ Alter field content on post
+
+
+~ Alter field created_at on post
+
+
+~ Alter field excerpt on post
+
+
+~ Alter field is_published on post
+
+
+~ Alter field published_at on post
+
+
+~ Alter field slug on post
+
+
+~ Alter field title on post
+
+
+~ Alter field updated_at on post
+
+
++ Create index posts_post_slug_59b922_idx on field(s) slug of model post
+
+
++ Create index posts_post_created_183a3b_idx on field(s) -created_at of model post
+
+
++ Create index posts_post_is_publ_8c682c_idx on field(s) is_published, -published_at of model post
+
+
++ Create index posts_post_author__f8ea20_idx on field(s) author, -created_at of model post
+
+
+~ Rename table for category to (default)
+
+
+~ Rename table for post to (default)
+
+
+Migrations for 'users':
+
+
+apps/users/migrations/0002_alter_user_options_alter_user_managers_and_more.py
+
+
+~ Change Meta options on user
+
+
+~ Change managers on user
+
+
++ Add field is_verified to user
+
+
+~ Alter field avatar on user
+
+
+~ Alter field bio on user
+
+
+~ Alter field created_at on user
+
+
+~ Alter field email on user
+
+
+~ Alter field first_name on user
+
+
+~ Alter field last_name on user
+
+
+~ Alter field updated_at on user
+
+
++ Create index users_user_email_6f2530_idx on field(s) email of model user
+
+
++ Create index users_user_usernam_65d164_idx on field(s) username of model user
+
+
++ Create index users_user_created_5b2332_idx on field(s) -created_at of model user
+
+
+~ Rename table for user to (default)
+
+
 Running migrations...
 
 
 Operations to perform:
 
 
-Apply all migrations: admin, auth, contenttypes, debug_toolbar, django_celery_beat, sessions
+Apply all migrations: admin, auth, contenttypes, debug_toolbar, django_celery_beat, posts, sessions, users
 
 
 Running migrations:
@@ -119,105 +159,3 @@ File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line
 
 
 return self.cursor.execute(sql)
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-psycopg2.errors.UndefinedTable: relation "users_user" does not exist
-
-
-
-
-
-
-The above exception was the direct cause of the following exception:
-
-
-
-
-Traceback (most recent call last):
-
-
-File "/app/manage.py", line 22, in <module>
-
-
-main()
-
-
-File "/app/manage.py", line 18, in main
-
-
-execute_from_command_line(sys.argv)
-
-
-File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
-
-
-utility.execute()
-
-
-File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
-
-
-self.fetch_command(subcommand).run_from_argv(self.argv)
-
-
-File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 416, in run_from_argv
-
-
-self.execute(*args, **cmd_options)
-
-
-File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 460, in execute
-
-
-output = self.handle(*args, **options)
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 107, in wrapper
-
-
-res = handle_func(*args, **kwargs)
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-File "/usr/local/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 353, in handle
-
-
-post_migrate_state = executor.migrate(
-
-
-^^^^^^^^^^^^^^^^^
-
-
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 135, in migrate
-
-
-state = self._migrate_all_forwards(
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 167, in _migrate_all_forwards
-
-
-state = self.apply_migration(
-
-
-^^^^^^^^^^^^^^^^^^^^^
-
-
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 252, in apply_migration
-
-
-with self.connection.schema_editor(
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
