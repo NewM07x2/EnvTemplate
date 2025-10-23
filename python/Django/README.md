@@ -220,6 +220,21 @@ docker-compose exec app python manage.py makemigrations
 docker-compose exec app python manage.py migrate
 ```
 
+#### 自動マイグレーションの制御
+
+このテンプレートは起動時にマイグレーションを自動実行する設定（開発向け）になっています。`AUTO_MIGRATE` 環境変数で制御できます。
+
+- デフォルト: `AUTO_MIGRATE=true`（`docker-compose.yml` のサービス環境で既定値を設定）
+- 無効化するには `.env.docker` または環境で `AUTO_MIGRATE=false` を設定してください。これにより起動時に自動的な `migrate` をスキップします。
+
+例（無効化して起動）:
+
+```powershell
+# Windows PowerShell
+$env:AUTO_MIGRATE = 'false'
+docker-compose up -d --build
+```
+
 #### STATICFILES_DIRS 警告が表示される場合
 
 `config/settings.py` で `STATICFILES_DIRS` がコメントアウトされていることを確認してください。静的ファイルを追加する場合は、`static/` ディレクトリにファイルを配置してコメントを解除してください。

@@ -57,6 +57,7 @@ services:
       - DB_PORT=5432
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - AUTO_MIGRATE=${AUTO_MIGRATE:-true}
     depends_on:
       db:
         condition: service_healthy
@@ -81,6 +82,7 @@ services:
       - DB_PORT=5432
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - AUTO_MIGRATE=${AUTO_MIGRATE:-true}
     depends_on:
       db:
         condition: service_healthy
@@ -105,6 +107,7 @@ services:
       - DB_PORT=5432
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - AUTO_MIGRATE=${AUTO_MIGRATE:-true}
     depends_on:
       db:
         condition: service_healthy

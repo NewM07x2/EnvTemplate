@@ -29,22 +29,25 @@ COPY . .
 # Collect static files (will be run in entrypoint if needed)
 # RUN python manage.py collectstatic --noinput
 
-# Create entrypoint script
+# Create entrypoint script (checks AUTO_MIGRATE env var)
 RUN echo '#!/bin/bash\n\
     set -e\n\
     \n\
     echo "Waiting for PostgreSQL..."\n\
-    while ! pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER; do\n\
+    while ! pg_isready -h ${DB_HOST:-db} -p ${DB_PORT:-5432} -U ${DB_USER:-django_user}; do\n\
     sleep 1\n\
-    done\n\
+
     echo "PostgreSQL is ready!"\n\
     \n\
-    echo "Creating migrations..."\n\
-    python manage.py makemigrations --noinput || true\n\
-    \n\
+    if [ "${AUTO_MIGRATE:-true}" = "true" ]; then\n\
     echo "Running migrations..."\n\
-    python manage.py migrate --noinput\n\
-    \n\
+    # Run migrate but do not let the container exit if migrate fails; log the error instead
+    if ! python manage.py migrate --noinput; then\n\
+    echo "WARNING: migrate failed. Starting app without applying migrations." >&2\n\
+    fi\n\
+    else\n\
+    echo "AUTO_MIGRATE is disabled; skipping migrations."\n\
+    fi\n\
     echo "Collecting static files..."\n\
     python manage.py collectstatic --noinput || true\n\
     \n\
@@ -52,6 +55,5 @@ RUN echo '#!/bin/bash\n\
     exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-
 # Default command
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "120"]
