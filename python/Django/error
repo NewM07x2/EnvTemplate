@@ -18,3 +18,251 @@ docker-compose ps
 
 # スーパーユーザーを作成
 docker-compose exec app python manage.py createsuperuser
+
+
+(base) mnitta@MasatonoMacBook-Pro Django % docker-compose logs -f app
+WARN[0000] /Users/mnitta/devlop/EnvTemplate/python/Django/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+django_app  | Waiting for PostgreSQL...
+django_app  | db:5432 - accepting connections
+django_app  | PostgreSQL is ready!
+django_app  | Running migrations...
+django_app  | Operations to perform:
+django_app  |   Apply all migrations: admin, auth, contenttypes, debug_toolbar, django_celery_beat, posts, sessions, users
+django_app  | Running migrations:
+django_app  | Traceback (most recent call last):
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 103, in _execute
+django_app  |     return self.cursor.execute(sql)
+django_app  |            ^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  | psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+django_app  | DETAIL:  Key (typname, typnamespace)=(django_migrations, 2200) already exists.
+django_app  | 
+django_app  | 
+django_app  | The above exception was the direct cause of the following exception:
+django_app  | 
+django_app  | Traceback (most recent call last):
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/migrations/recorder.py", line 78, in ensure_schema
+django_app  |     editor.create_model(self.Migration)
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 512, in create_model
+django_app  |     self.execute(sql, params or None)
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py", line 45, in execute
+django_app  |     return super().execute(sql, params)
+django_app  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 204, in execute
+django_app  |     cursor.execute(sql, params)
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+django_app  |     return super().execute(sql, params)
+django_app  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+django_app  |     return self._execute_with_wrappers(
+django_app  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+django_app  |     return executor(sql, params, many, context)
+django_app  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
+django_app  |     with self.db.wrap_database_errors:
+django_app  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+django_app  |     raise dj_exc_value.with_traceback(traceback) from exc_value
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 103, in _execute
+django_app  |     return self.cursor.execute(sql)
+django_app  |            ^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  | django.db.utils.IntegrityError: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+django_app  | DETAIL:  Key (typname, typnamespace)=(django_migrations, 2200) already exists.
+django_app  | 
+django_app  | 
+django_app  | During handling of the above exception, another exception occurred:
+django_app  | 
+django_app  | Traceback (most recent call last):
+django_app  |   File "/app/manage.py", line 22, in <module>
+django_app  |     main()
+django_app  |   File "/app/manage.py", line 18, in main
+django_app  |     execute_from_command_line(sys.argv)
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+django_app  |     utility.execute()
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
+django_app  |     self.fetch_command(subcommand).run_from_argv(self.argv)
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 416, in run_from_argv
+django_app  |     self.execute(*args, **cmd_options)
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 460, in execute
+django_app  |     output = self.handle(*args, **options)
+django_app  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 107, in wrapper
+django_app  |     res = handle_func(*args, **kwargs)
+django_app  |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 353, in handle
+django_app  |     post_migrate_state = executor.migrate(
+django_app  |                          ^^^^^^^^^^^^^^^^^
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 107, in migrate
+django_app  |     self.recorder.ensure_schema()
+django_app  |   File "/usr/local/lib/python3.12/site-packages/django/db/migrations/recorder.py", line 80, in ensure_schema
+django_app  |     raise MigrationSchemaMissing(
+django_app  | django.db.migrations.exceptions.MigrationSchemaMissing: Unable to create the django_migrations table (duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+django_app  | DETAIL:  Key (typname, typnamespace)=(django_migrations, 2200) already exists.
+django_app  | )
+django_app  | Collecting static files...
+django_app  | WARNING: migrate failed. Starting app without applying migrations.
+django_app  | 
+django_app  | 171 static files copied to '/app/staticfiles'.
+django_app  | Starting server...
+django_app  | [2025-10-23 09:55:56 +0000] [1] [INFO] Starting gunicorn 23.0.0
+django_app  | [2025-10-23 09:55:56 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+django_app  | [2025-10-23 09:55:56 +0000] [1] [INFO] Using worker: sync
+django_app  | [2025-10-23 09:55:56 +0000] [10] [INFO] Booting worker with pid: 10
+django_app  | [2025-10-23 09:55:56 +0000] [11] [INFO] Booting worker with pid: 11
+django_app  | [2025-10-23 09:55:56 +0000] [12] [INFO] Booting worker with pid: 12
+django_app  | [2025-10-23 09:55:56 +0000] [13] [INFO] Booting worker with pid: 13
+
+
+
+(base) mnitta@MasatonoMacBook-Pro Django % docker-compose logs -f celery_beat         
+WARN[0000] /Users/mnitta/devlop/EnvTemplate/python/Django/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+django_celery_beat  | Waiting for PostgreSQL...
+django_celery_beat  | db:5432 - accepting connections
+django_celery_beat  | PostgreSQL is ready!
+django_celery_beat  | Running migrations...
+django_celery_beat  | Operations to perform:
+django_celery_beat  |   Apply all migrations: admin, auth, contenttypes, debug_toolbar, django_celery_beat, posts, sessions, users
+django_celery_beat  | Running migrations:
+django_celery_beat  | Traceback (most recent call last):
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 103, in _execute
+django_celery_beat  |     return self.cursor.execute(sql)
+django_celery_beat  |            ^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  | psycopg2.errors.DuplicateTable: relation "django_migrations" already exists
+django_celery_beat  | 
+django_celery_beat  | 
+django_celery_beat  | The above exception was the direct cause of the following exception:
+django_celery_beat  | 
+django_celery_beat  | Traceback (most recent call last):
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/migrations/recorder.py", line 78, in ensure_schema
+django_celery_beat  |     editor.create_model(self.Migration)
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 512, in create_model
+django_celery_beat  |     self.execute(sql, params or None)
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py", line 45, in execute
+django_celery_beat  |     return super().execute(sql, params)
+django_celery_beat  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 204, in execute
+django_celery_beat  |     cursor.execute(sql, params)
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+django_celery_beat  |     return super().execute(sql, params)
+django_celery_beat  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+django_celery_beat  |     return self._execute_with_wrappers(
+django_celery_beat  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+django_celery_beat  |     return executor(sql, params, many, context)
+django_celery_beat  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
+django_celery_beat  |     with self.db.wrap_database_errors:
+django_celery_beat  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+django_celery_beat  |     raise dj_exc_value.with_traceback(traceback) from exc_value
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 103, in _execute
+django_celery_beat  |     return self.cursor.execute(sql)
+django_celery_beat  |            ^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  | django.db.utils.ProgrammingError: relation "django_migrations" already exists
+django_celery_beat  | 
+django_celery_beat  | 
+django_celery_beat  | During handling of the above exception, another exception occurred:
+django_celery_beat  | 
+django_celery_beat  | Traceback (most recent call last):
+django_celery_beat  |   File "/app/manage.py", line 22, in <module>
+django_celery_beat  |     main()
+django_celery_beat  |   File "/app/manage.py", line 18, in main
+django_celery_beat  |     execute_from_command_line(sys.argv)
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+django_celery_beat  |     utility.execute()
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
+django_celery_beat  |     self.fetch_command(subcommand).run_from_argv(self.argv)
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 416, in run_from_argv
+django_celery_beat  |     self.execute(*args, **cmd_options)
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 460, in execute
+django_celery_beat  |     output = self.handle(*args, **options)
+django_celery_beat  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 107, in wrapper
+django_celery_beat  |     res = handle_func(*args, **kwargs)
+django_celery_beat  |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 353, in handle
+django_celery_beat  |     post_migrate_state = executor.migrate(
+django_celery_beat  |                          ^^^^^^^^^^^^^^^^^
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 107, in migrate
+django_celery_beat  |     self.recorder.ensure_schema()
+django_celery_beat  |   File "/usr/local/lib/python3.12/site-packages/django/db/migrations/recorder.py", line 80, in ensure_schema
+django_celery_beat  |     raise MigrationSchemaMissing(
+django_celery_beat  | django.db.migrations.exceptions.MigrationSchemaMissing: Unable to create the django_migrations table (relation "django_migrations" already exists
+django_celery_beat  | )
+django_celery_beat  | Collecting static files...
+django_celery_beat  | WARNING: migrate failed. Starting app without applying migrations.
+django_celery_beat  | 
+django_celery_beat  | 171 static files copied to '/app/staticfiles'.
+django_celery_beat  | Starting server...
+django_celery_beat  | Usage: celery [OPTIONS] COMMAND [ARGS]...
+django_celery_beat  | Try 'celery --help' for help.
+django_celery_beat  | 
+django_celery_beat  | Error: 
+django_celery_beat  | Unable to load celery application.
+django_celery_beat  | Module 'config' has no attribute 'celery'
+
+
+(base) mnitta@MasatonoMacBook-Pro Django % docker-compose logs -f celery_worker
+WARN[0000] /Users/mnitta/devlop/EnvTemplate/python/Django/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+django_celery_worker  | Waiting for PostgreSQL...
+django_celery_worker  | db:5432 - accepting connections
+django_celery_worker  | PostgreSQL is ready!
+django_celery_worker  | Running migrations...
+django_celery_worker  | Operations to perform:
+django_celery_worker  |   Apply all migrations: admin, auth, contenttypes, debug_toolbar, django_celery_beat, posts, sessions, users
+django_celery_worker  | Running migrations:
+django_celery_worker  |   Applying contenttypes.0001_initial... OK
+django_celery_worker  |   Applying contenttypes.0002_remove_content_type_name... OK
+django_celery_worker  |   Applying auth.0001_initial... OK
+django_celery_worker  |   Applying auth.0002_alter_permission_name_max_length... OK
+django_celery_worker  |   Applying auth.0003_alter_user_email_max_length... OK
+django_celery_worker  |   Applying auth.0004_alter_user_username_opts... OK
+django_celery_worker  |   Applying auth.0005_alter_user_last_login_null... OK
+django_celery_worker  |   Applying auth.0006_require_contenttypes_0002... OK
+django_celery_worker  |   Applying auth.0007_alter_validators_add_error_messages... OK
+django_celery_worker  |   Applying auth.0008_alter_user_username_max_length... OK
+django_celery_worker  |   Applying auth.0009_alter_user_last_name_max_length... OK
+django_celery_worker  |   Applying auth.0010_alter_group_name_max_length... OK
+django_celery_worker  |   Applying auth.0011_update_proxy_permissions... OK
+django_celery_worker  |   Applying auth.0012_alter_user_first_name_max_length... OK
+django_celery_worker  |   Applying users.0001_initial... OK
+django_celery_worker  |   Applying admin.0001_initial... OK
+django_celery_worker  |   Applying admin.0002_logentry_remove_auto_add... OK
+django_celery_worker  |   Applying admin.0003_logentry_add_action_flag_choices... OK
+django_celery_worker  |   Applying debug_toolbar.0001_initial... OK
+django_celery_worker  |   Applying django_celery_beat.0001_initial... OK
+django_celery_worker  |   Applying django_celery_beat.0002_auto_20161118_0346... OK
+django_celery_worker  |   Applying django_celery_beat.0003_auto_20161209_0049... OK
+django_celery_worker  |   Applying django_celery_beat.0004_auto_20170221_0000... OK
+django_celery_worker  |   Applying django_celery_beat.0005_add_solarschedule_events_choices... OK
+django_celery_worker  |   Applying django_celery_beat.0006_auto_20180322_0932... OK
+django_celery_worker  |   Applying django_celery_beat.0007_auto_20180521_0826... OK
+django_celery_worker  |   Applying django_celery_beat.0008_auto_20180914_1922... OK
+django_celery_worker  |   Applying django_celery_beat.0006_auto_20180210_1226... OK
+django_celery_worker  |   Applying django_celery_beat.0006_periodictask_priority... OK
+django_celery_worker  |   Applying django_celery_beat.0009_periodictask_headers... OK
+django_celery_worker  |   Applying django_celery_beat.0010_auto_20190429_0326... OK
+django_celery_worker  |   Applying django_celery_beat.0011_auto_20190508_0153... OK
+django_celery_worker  |   Applying django_celery_beat.0012_periodictask_expire_seconds... OK
+django_celery_worker  |   Applying django_celery_beat.0013_auto_20200609_0727... OK
+django_celery_worker  |   Applying django_celery_beat.0014_remove_clockedschedule_enabled... OK
+django_celery_worker  |   Applying django_celery_beat.0015_edit_solarschedule_events_choices... OK
+django_celery_worker  |   Applying django_celery_beat.0016_alter_crontabschedule_timezone... OK
+django_celery_worker  |   Applying django_celery_beat.0017_alter_crontabschedule_month_of_year... OK
+django_celery_worker  |   Applying django_celery_beat.0018_improve_crontab_helptext... OK
+django_celery_worker  |   Applying django_celery_beat.0019_alter_periodictasks_options... OK
+django_celery_worker  |   Applying posts.0001_initial... OK
+django_celery_worker  |   Applying posts.0002_alter_category_options_alter_post_options_and_more... OK
+django_celery_worker  |   Applying sessions.0001_initial... OK
+django_celery_worker  |   Applying users.0002_alter_user_options_alter_user_managers_and_more... OK
+django_celery_worker  | Collecting static files...
+django_celery_worker  | 
+django_celery_worker  | 0 static files copied to '/app/staticfiles', 171 unmodified.
+django_celery_worker  | Starting server...
+django_celery_worker  | Usage: celery [OPTIONS] COMMAND [ARGS]...
+django_celery_worker  | Try 'celery --help' for help.
+django_celery_worker  | 
+django_celery_worker  | Error: 
+django_celery_worker  | Unable to load celery application.
+django_celery_worker  | Module 'config' has no attribute 'celery'
