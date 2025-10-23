@@ -1,2 +1,20 @@
 /entrypoint.sh: line 22: syntax error: unexpected end of file
-Waiting for PostgreSQL...
+Waiting for PostgreSQL...~~~~
+
+# 既存のボリュームを削除してクリーンに起動（データはリセットされます）
+docker-compose down -v
+
+# 再ビルドして起動
+docker-compose up -d --build
+
+# ログを確認
+docker-compose logs -f app
+
+# すべてのコンテナが起動しているか確認
+docker-compose ps
+
+# アプリケーションにアクセス
+# ブラウザで http://localhost:8000 を開く
+
+# スーパーユーザーを作成
+docker-compose exec app python manage.py createsuperuser

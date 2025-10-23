@@ -36,18 +36,18 @@ RUN echo '#!/bin/bash\n\
     echo "Waiting for PostgreSQL..."\n\
     while ! pg_isready -h ${DB_HOST:-db} -p ${DB_PORT:-5432} -U ${DB_USER:-django_user}; do\n\
     sleep 1\n\
-
+    done\n\
     echo "PostgreSQL is ready!"\n\
     \n\
     if [ "${AUTO_MIGRATE:-true}" = "true" ]; then\n\
     echo "Running migrations..."\n\
-    # Run migrate but do not let the container exit if migrate fails; log the error instead
     if ! python manage.py migrate --noinput; then\n\
     echo "WARNING: migrate failed. Starting app without applying migrations." >&2\n\
     fi\n\
     else\n\
     echo "AUTO_MIGRATE is disabled; skipping migrations."\n\
     fi\n\
+    \n\
     echo "Collecting static files..."\n\
     python manage.py collectstatic --noinput || true\n\
     \n\
