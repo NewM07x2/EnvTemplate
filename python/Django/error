@@ -266,3 +266,16 @@ django_celery_worker  |
 django_celery_worker  | Error: 
 django_celery_worker  | Unable to load celery application.
 django_celery_worker  | Module 'config' has no attribute 'celery'
+
+
+# クリーンに再起動
+docker-compose down -v
+docker-compose up -d --build
+
+# 全サービスのログを確認
+docker-compose logs -f
+
+# または個別に確認
+docker-compose logs -f app
+docker-compose logs -f celery_worker
+docker-compose logs -f celery_beat
