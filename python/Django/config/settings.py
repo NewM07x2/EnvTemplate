@@ -186,7 +186,7 @@ GRAPHENE = {
 # DRF Spectacular Settings (OpenAPI/Swagger)
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Django Template API',
-    'DESCRIPTION': 'Django + GraphQL + Prisma Template Project',
+    'DESCRIPTION': 'Django + GraphQL Template Project',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
@@ -200,9 +200,6 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-
-# Prisma Database URL (if using Prisma alongside Django ORM)
-PRISMA_DATABASE_URL = env('DATABASE_URL', default='postgresql://user:password@localhost:5432/dbname')
 
 # Logging
 LOGGING = {

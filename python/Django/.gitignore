@@ -64,8 +64,7 @@ coverage.xml
 .pytest_cache/
 htmlcov/
 
-# Prisma
-prisma/migrations/
+# Node modules (if any)
 node_modules/
 
 # Celery

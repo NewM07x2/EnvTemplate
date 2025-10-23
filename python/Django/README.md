@@ -1,8 +1,6 @@
-# Django Template# template
+# Django Template
 
-python template
-
-Django 5.0 + GraphQL + Prisma + Docker のベストプラクティステンプレート
+Django 5.0 + GraphQL + Docker のベストプラクティステンプレート
 
 ## 📋 目次
 
@@ -22,14 +20,13 @@ Django 5.0 + GraphQL + Prisma + Docker のベストプラクティステンプ�
 ## 概要
 
 このプロジェクトは、Django 5.0 を使用したモダンな Web アプリケーション開発のためのテンプレートです。  
-REST API と GraphQL の両方をサポートし、Prisma を使用したデータベース管理も可能です（Django ORM と併用可能）。
+REST API と GraphQL の両方をサポートしています。
 
 ## 機能
 
 - ✅ **Django 5.0** - 最新の Django フレームワーク
 - ✅ **Django REST Framework** - 強力な REST API
 - ✅ **GraphQL** - Graphene-Django を使用した GraphQL API
-- ✅ **Prisma (Optional)** - 型安全な ORM（Django ORM と併用可能）
 - ✅ **JWT 認証** - SimpleJWT による認証システム
 - ✅ **カスタムユーザーモデル** - 拡張可能なユーザー管理
 - ✅ **レイヤードアーキテクチャ** - Repository/Service/Controller パターン
@@ -48,7 +45,6 @@ REST API と GraphQL の両方をサポートし、Prisma を使用したデー�
 
 ### データベース
 - **PostgreSQL**: 16+ (推奨)
-- **Prisma**: 0.15.0+ (オプション - Django ORM と併用可能)
 
 ### 認証・セキュリティ
 - **djangorestframework-simplejwt**: JWT 認証
@@ -99,8 +95,6 @@ python/Django/
 │   └── views.py                  # ヘルスチェック等
 ├── docker/                        # Docker 関連ファイル
 │   └── Dockerfile.backend        # バックエンド用 Dockerfile
-├── prisma/                        # Prisma スキーマ (オプション)
-│   └── schema.prisma             # データベーススキーマ定義
 ├── tests/                         # テストコード
 │   ├── __init__.py
 │   ├── conftest.py               # pytest 設定
@@ -120,7 +114,6 @@ python/Django/
 - **Python 3.12 以上**
 - **Docker & Docker Compose** (Docker での実行の場合)
 - **PostgreSQL 16 以上** (ローカル開発の場合)
-- **Node.js 18 以上** (Prisma CLI のため、オプション)
 
 ## セットアップ
 
@@ -133,23 +126,6 @@ cp .env.example .env
 # .env ファイルを編集して設定を調整
 # 重要: SECRET_KEY は必ず変更してください
 ```
-
-### Prisma のセットアップ (オプション)
-
-Prisma を使用する場合:
-
-```bash
-# Prisma CLI のインストール (グローバル)
-npm install -g prisma
-
-# Prisma Client の生成
-prisma generate
-
-# Prisma マイグレーション (Django migrations とは別)
-prisma db push
-```
-
-**注意**: このテンプレートでは Django ORM と Prisma を併用できます。Prisma が不要な場合は、`prisma/` ディレクトリと関連する依存関係を削除してください。
 
 ## Docker での起動方法
 
@@ -408,12 +384,6 @@ cp apps/users/services.py apps/<new_app>/services.py
 1. `requirements.txt` から削除: `graphene-django`, `graphql-core`
 2. 各アプリの `schema.py` を削除
 3. `config/urls.py` から GraphQL エンドポイントを削除
-
-#### Prisma を使用しない場合
-
-1. `requirements.txt` から `prisma` を削除
-2. `prisma/` ディレクトリを削除
-3. `docker/Dockerfile.backend` から Prisma 関連のコマンドを削除
 
 ## テスト
 

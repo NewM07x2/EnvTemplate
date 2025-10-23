@@ -4,7 +4,6 @@ django-environ>=0.11.0
 
 # Database
 psycopg2-binary>=2.9.9
-prisma>=0.15.0
 
 # REST API
 djangorestframework>=3.14.0
