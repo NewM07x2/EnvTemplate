@@ -124,3 +124,14 @@ with self.db.wrap_database_errors:
 
 
 File "/usr/local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+
+
+
+# 既存のボリュームを削除してクリーンな状態から起動
+docker-compose down -v
+
+# 再ビルドして起動
+docker-compose up -d --build
+
+# ログを確認
+docker-compose logs -f app

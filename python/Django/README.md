@@ -176,9 +176,30 @@ docker-compose exec app python manage.py createsuperuser
 # サービスの停止
 docker-compose down
 
-# ボリュームも含めて削除
+# ボリュームも含めて削除（データベースを完全にリセット）
 docker-compose down -v
 ```
+
+### トラブルシューティング
+
+#### データベースマイグレーションエラーが発生する場合
+
+既存のデータベースボリュームが原因でマイグレーションエラーが発生する場合は、以下の手順でクリーンアップしてください:
+
+```powershell
+# すべてのサービスを停止し、ボリュームを削除
+docker-compose down -v
+
+# 再度ビルドして起動
+docker-compose up -d --build
+
+# ログを確認
+docker-compose logs -f app
+```
+
+#### STATICFILES_DIRS 警告が表示される場合
+
+`config/settings.py` で `STATICFILES_DIRS` がコメントアウトされていることを確認してください。静的ファイルを追加する場合は、`static/` ディレクトリにファイルを配置してコメントを解除してください。
 
 ## ローカル開発環境での起動
 
