@@ -2,6 +2,7 @@
 
 from functools import lru_cache
 from typing import Any
+import json
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -81,25 +82,72 @@ class Settings(BaseSettings):
     @classmethod
     def parse_cors_origins(cls, v: Any) -> list[str]:
         """Parse CORS origins from string or list."""
+        # Accept None -> return empty list (no origins)
+        if v is None:
+            return []
+
+        # Already a list (e.g., set via environment in some systems)
+        if isinstance(v, (list, tuple)):
+            return [str(x).strip() for x in v]
+
+        # If it's a string, try several common formats
         if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",")]
-        return v
+            raw = v.strip()
+            if raw == "":
+                return []
+            # JSON array: ["http://...","http://..."]
+            if raw.startswith("[") and raw.endswith("]"):
+                try:
+                    parsed = json.loads(raw)
+                    if isinstance(parsed, list):
+                        return [str(x).strip() for x in parsed]
+                except Exception:
+                    # fallthrough to comma-split
+                    pass
+            # Comma-separated
+            return [origin.strip() for origin in raw.split(",") if origin.strip()]
+
+        # Fallback: cast to string and split
+        try:
+            return [origin.strip() for origin in str(v).split(",") if origin is not None]
+        except Exception:
+            return []
 
     @field_validator("ALLOWED_METHODS", mode="before")
     @classmethod
     def parse_cors_methods(cls, v: Any) -> list[str]:
         """Parse CORS methods from string or list."""
+        if v is None:
+            return []
+        if isinstance(v, (list, tuple)):
+            return [str(x).strip() for x in v]
         if isinstance(v, str):
-            return [method.strip() for method in v.split(",")]
-        return v
+            raw = v.strip()
+            if raw == "":
+                return []
+            return [method.strip() for method in raw.split(",") if method.strip()]
+        try:
+            return [m.strip() for m in str(v).split(",")]
+        except Exception:
+            return []
 
     @field_validator("ALLOWED_HEADERS", mode="before")
     @classmethod
     def parse_cors_headers(cls, v: Any) -> list[str]:
         """Parse CORS headers from string or list."""
+        if v is None:
+            return []
+        if isinstance(v, (list, tuple)):
+            return [str(x).strip() for x in v]
         if isinstance(v, str):
-            return [header.strip() for header in v.split(",")]
-        return v
+            raw = v.strip()
+            if raw == "":
+                return []
+            return [header.strip() for header in raw.split(",") if header.strip()]
+        try:
+            return [h.strip() for h in str(v).split(",")]
+        except Exception:
+            return []
 
 
 @lru_cache
