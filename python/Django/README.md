@@ -154,6 +154,10 @@ docker-compose logs -f db
 
 ```powershell
 # マイグレーションは自動で実行されますが、手動で実行する場合:
+# マイグレーションファイルを作成
+docker-compose exec app python manage.py makemigrations
+
+# マイグレーションを適用
 docker-compose exec app python manage.py migrate
 
 # スーパーユーザーの作成
@@ -187,14 +191,33 @@ docker-compose down -v
 既存のデータベースボリュームが原因でマイグレーションエラーが発生する場合は、以下の手順でクリーンアップしてください:
 
 ```powershell
-# すべてのサービスを停止し、ボリュームを削除
+# すべてのサービスを停止
+docker-compose down
+
+# ボリュームを削除してデータベースを完全にリセット
 docker-compose down -v
+
+# イメージも削除する場合（完全クリーン）
+docker-compose down -v --rmi all
 
 # 再度ビルドして起動
 docker-compose up -d --build
 
 # ログを確認
 docker-compose logs -f app
+
+# スーパーユーザーを作成
+docker-compose exec app python manage.py createsuperuser
+```
+
+#### マイグレーションファイルを再生成したい場合
+
+```powershell
+# コンテナ内でマイグレーションを再生成
+docker-compose exec app python manage.py makemigrations
+
+# マイグレーションを適用
+docker-compose exec app python manage.py migrate
 ```
 
 #### STATICFILES_DIRS 警告が表示される場合

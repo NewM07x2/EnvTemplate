@@ -39,6 +39,9 @@ RUN echo '#!/bin/bash\n\
     done\n\
     echo "PostgreSQL is ready!"\n\
     \n\
+    echo "Creating migrations..."\n\
+    python manage.py makemigrations --noinput || true\n\
+    \n\
     echo "Running migrations..."\n\
     python manage.py migrate --noinput\n\
     \n\
