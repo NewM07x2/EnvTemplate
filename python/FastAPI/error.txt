@@ -45,5 +45,214 @@ docker-compose logs -f --tail 300 app
 docker-compose down
 docker-compose up --build
 docker-compose exec app python -m pip freeze
+(base) mnitta@MasatonoMacBook-Pro FastAPI % docker-compose exec app python -m pip freeze
+WARN[0000] /Users/mnitta/devlop/EnvTemplate/python/FastAPI/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+alembic==1.13.3
+amqp==5.3.1
+annotated-types==0.7.0
+anyio==4.11.0
+bcrypt==5.0.0
+billiard==4.2.2
+black==24.8.0
+celery==5.4.0
+certifi==2025.10.5
+cffi==2.0.0
+cfgv==3.4.0
+click==8.3.0
+click-didyoumean==0.3.1
+click-plugins==1.1.1.2
+click-repl==0.3.0
+coverage==7.11.0
+cryptography==46.0.3
+distlib==0.4.0
+dnspython==2.8.0
+ecdsa==0.19.1
+email-validator==1.3.1
+fastapi==0.115.0
+filelock==3.20.0
+flake8==7.1.1
+graphql-core==3.2.6
+greenlet==3.2.4
+h11==0.16.0
+httpcore==1.0.9
+httptools==0.7.1
+httpx==0.27.0
+identify==2.6.15
+idna==3.11
+iniconfig==2.3.0
+isort==5.13.2
+Jinja2==3.1.6
+kombu==5.5.4
+Mako==1.3.10
+MarkupSafe==3.0.3
+mccabe==0.7.0
+mypy==1.11.2
+mypy_extensions==1.1.0
+nodeenv==1.9.1
+packaging==25.0
+passlib==1.7.4
+pathspec==0.12.1
+platformdirs==4.5.0
+pluggy==1.6.0
+pre-commit==3.8.0
+prisma==0.15.0
+prompt_toolkit==3.0.52
+pyasn1==0.6.1
+pycodestyle==2.12.1
+pycparser==2.23
+pydantic==2.9.0
+pydantic-settings==2.5.0
+pydantic_core==2.23.2
+pyflakes==3.2.0
+pytest==8.3.0
+pytest-asyncio==0.24.0
+pytest-cov==5.0.0
+python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
+python-jose==3.3.0
+python-multipart==0.0.9
+PyYAML==6.0.3
+redis==5.0.8
+rsa==4.9.1
+six==1.17.0
+sniffio==1.3.1
+SQLAlchemy==2.0.35
+starlette==0.38.6
+strawberry-graphql==0.239.0
+tomlkit==0.13.3
+typing_extensions==4.15.0
+tzdata==2025.2
+uvicorn==0.30.0
+uvloop==0.22.1
+vine==5.1.0
+virtualenv==20.35.3
+watchfiles==1.1.1
+wcwidth==0.2.14
+websockets==15.0.1
+
 docker-compose logs --no-color --tail=500 app > app_last.log
 Get-Content .\app_last.log -Wait
+
+
+app_last.logの内容
+fastapi-app  | Environment variables loaded from .env
+fastapi-app  | Prisma schema loaded from prisma/schema.prisma
+fastapi-app  | Datasource "db": PostgreSQL database "fastapi_db", schema "public" at "postgres:5432"
+fastapi-app  | 
+fastapi-app  | The database is already in sync with the Prisma schema.
+fastapi-app  | 
+fastapi-app  | Running generate... (Use --skip-generate to skip the generators)
+fastapi-app  | [2K[1A[2K[GRunning generate... - Prisma Client Python (v0.15.0)
+fastapi-app  | [2K[1A[2K[G✔ Generated Prisma Client Python (v0.15.0) to ./../usr/local/lib/python3.12/site
+fastapi-app  | -packages/prisma in 102ms
+fastapi-app  | 
+fastapi-app  | INFO:     Will watch for changes in these directories: ['/app']
+fastapi-app  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+fastapi-app  | INFO:     Started reloader process [57] using WatchFiles
+fastapi-app  | Process SpawnProcess-1:
+fastapi-app  | Traceback (most recent call last):
+fastapi-app  |   File "/usr/local/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+fastapi-app  |     self.run()
+fastapi-app  |   File "/usr/local/lib/python3.12/multiprocessing/process.py", line 108, in run
+fastapi-app  |     self._target(*self._args, **self._kwargs)
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+fastapi-app  |     target(sockets=sockets)
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/server.py", line 65, in run
+fastapi-app  |     return asyncio.run(self.serve(sockets=sockets))
+fastapi-app  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/asyncio/runners.py", line 195, in run
+fastapi-app  |     return runner.run(main)
+fastapi-app  |            ^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/asyncio/runners.py", line 118, in run
+fastapi-app  |     return self._loop.run_until_complete(task)
+fastapi-app  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/server.py", line 69, in serve
+fastapi-app  |     await self._serve(sockets)
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/server.py", line 76, in _serve
+fastapi-app  |     config.load()
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/config.py", line 434, in load
+fastapi-app  |     self.loaded_app = import_from_string(self.app)
+fastapi-app  |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/importer.py", line 19, in import_from_string
+fastapi-app  |     module = importlib.import_module(module_str)
+fastapi-app  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/importlib/__init__.py", line 90, in import_module
+fastapi-app  |     return _bootstrap._gcd_import(name[level:], package, level)
+fastapi-app  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+fastapi-app  |   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+fastapi-app  |   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+fastapi-app  |   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+fastapi-app  |   File "<frozen importlib._bootstrap_external>", line 999, in exec_module
+fastapi-app  |   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+fastapi-app  |   File "/app/main.py", line 6, in <module>
+fastapi-app  |     from fastapi import FastAPI
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/fastapi/__init__.py", line 7, in <module>
+fastapi-app  |     from .applications import FastAPI as FastAPI
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/fastapi/applications.py", line 16, in <module>
+fastapi-app  |     from fastapi import routing
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 24, in <module>
+fastapi-app  |     from fastapi import params
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/fastapi/params.py", line 5, in <module>
+fastapi-app  |     from fastapi.openapi.models import Example
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/fastapi/openapi/models.py", line 68, in <module>
+fastapi-app  |     class Contact(BaseModelWithConfig):
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_model_construction.py", line 223, in __new__
+fastapi-app  |     complete_model_class(
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_model_construction.py", line 568, in complete_model_class
+fastapi-app  |     schema = cls.__get_pydantic_core_schema__(cls, handler)
+fastapi-app  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/main.py", line 670, in __get_pydantic_core_schema__
+fastapi-app  |     return handler(source)
+fastapi-app  |            ^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_schema_generation_shared.py", line 83, in __call__
+fastapi-app  |     schema = self._handler(source_type)
+fastapi-app  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 655, in generate_schema
+fastapi-app  |     schema = self._generate_schema_inner(obj)
+fastapi-app  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 924, in _generate_schema_inner
+fastapi-app  |     return self._model_schema(obj)
+fastapi-app  |            ^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 739, in _model_schema
+fastapi-app  |     {k: self._generate_md_field_schema(k, v, decorators) for k, v in fields.items()},
+fastapi-app  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 1115, in _generate_md_field_schema
+fastapi-app  |     common_field = self._common_field_schema(name, field_info, decorators)
+fastapi-app  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 1308, in _common_field_schema
+fastapi-app  |     schema = self._apply_annotations(
+fastapi-app  |              ^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 2104, in _apply_annotations
+fastapi-app  |     schema = get_inner_schema(source_type)
+fastapi-app  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_schema_generation_shared.py", line 83, in __call__
+fastapi-app  |     schema = self._handler(source_type)
+fastapi-app  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 2085, in inner_handler
+fastapi-app  |     schema = self._generate_schema_inner(obj)
+fastapi-app  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 929, in _generate_schema_inner
+fastapi-app  |     return self.match_type(obj)
+fastapi-app  |            ^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 1029, in match_type
+fastapi-app  |     return self._match_generic_type(obj, origin)
+fastapi-app  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 1058, in _match_generic_type
+fastapi-app  |     return self._union_schema(obj)
+fastapi-app  |            ^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 1378, in _union_schema
+fastapi-app  |     choices.append(self.generate_schema(arg))
+fastapi-app  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 650, in generate_schema
+fastapi-app  |     from_property = self._generate_schema_from_property(obj, obj)
+fastapi-app  |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py", line 821, in _generate_schema_from_property
+fastapi-app  |     schema = get_schema(
+fastapi-app  |              ^^^^^^^^^^^
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/networks.py", line 459, in __get_pydantic_core_schema__
+fastapi-app  |     import_email_validator()
+fastapi-app  |   File "/usr/local/lib/python3.12/site-packages/pydantic/networks.py", line 423, in import_email_validator
+fastapi-app  |     raise ImportError('email-validator version >= 2.0 required, run pip install -U email-validator')
+fastapi-app  | ImportError: email-validator version >= 2.0 required, run pip install -U email-validator
