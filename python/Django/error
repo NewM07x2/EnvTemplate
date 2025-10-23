@@ -1,3 +1,96 @@
+django_celery_worker
+Waiting for PostgreSQL...
+db:5432 - accepting connections
+PostgreSQL is ready!
+Running migrations...
+Operations to perform:
+Apply all migrations: admin, auth, contenttypes, debug_toolbar, django_celery_beat, sessions
+Running migrations:
+Traceback (most recent call last):
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 103, in _execute
+return self.cursor.execute(sql)
+^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.DuplicateTable: relation "django_content_type" already exists
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+File "/app/manage.py", line 22, in <module>
+main()
+File "/app/manage.py", line 18, in main
+execute_from_command_line(sys.argv)
+File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+utility.execute()
+File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
+self.fetch_command(subcommand).run_from_argv(self.argv)
+File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 416, in run_from_argv
+self.execute(*args, **cmd_options)
+File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 460, in execute
+output = self.handle(*args, **options)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 107, in wrapper
+res = handle_func(*args, **kwargs)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 353, in handle
+post_migrate_state = executor.migrate(
+^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 135, in migrate
+state = self._migrate_all_forwards(
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 167, in _migrate_all_forwards
+state = self.apply_migration(
+^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 255, in apply_migration
+state = migration.apply(state, schema_editor)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+django_app
+Exited (1) (1 minute ago)
+output = self.handle(*args, **options)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 107, in wrapper
+res = handle_func(*args, **kwargs)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 353, in handle
+post_migrate_state = executor.migrate(
+^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 135, in migrate
+state = self._migrate_all_forwards(
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 167, in _migrate_all_forwards
+state = self.apply_migration(
+^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 252, in apply_migration
+with self.connection.schema_editor(
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 169, in __exit__
+self.execute(sql, None)
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py", line 45, in execute
+return super().execute(sql, params)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 204, in execute
+cursor.execute(sql, params)
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+return super().execute(sql, params)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+return self._execute_with_wrappers(
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+return executor(sql, params, many, context)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
+with self.db.wrap_database_errors:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+raise dj_exc_value.with_traceback(traceback) from exc_value
+File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 103, in _execute
+return self.cursor.execute(sql)
+^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: relation "users_user" does not exist
+Applying admin.0001_initial...
+
+
+django_celery_beat
 Waiting for PostgreSQL...
 
 
@@ -8,17 +101,6 @@ PostgreSQL is ready!
 
 
 Running migrations...
-
-
-System check identified some issues:
-
-
-
-
-WARNINGS:
-
-
-?: (staticfiles.W004) The directory '/app/static' in the STATICFILES_DIRS setting does not exist.
 
 
 Operations to perform:
@@ -42,10 +124,7 @@ return self.cursor.execute(sql)
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "pg_class_relname_nsp_index"
-
-
-DETAIL: Key (relname, relnamespace)=(django_migrations_id_seq, 2200) already exists.
+psycopg2.errors.UndefinedTable: relation "users_user" does not exist
 
 
 
@@ -60,78 +139,85 @@ The above exception was the direct cause of the following exception:
 Traceback (most recent call last):
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/migrations/recorder.py", line 78, in ensure_schema
+File "/app/manage.py", line 22, in <module>
 
 
-editor.create_model(self.Migration)
+main()
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 512, in create_model
+File "/app/manage.py", line 18, in main
 
 
-self.execute(sql, params or None)
+execute_from_command_line(sys.argv)
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py", line 45, in execute
+File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
 
 
-return super().execute(sql, params)
+utility.execute()
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/usr/local/lib/python3.12/site-packages/django/core/management/__init__.py", line 436, in execute
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/base/schema.py", line 204, in execute
+self.fetch_command(subcommand).run_from_argv(self.argv)
 
 
-cursor.execute(sql, params)
+File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 416, in run_from_argv
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+self.execute(*args, **cmd_options)
 
 
-return super().execute(sql, params)
+File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 460, in execute
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+output = self.handle(*args, **options)
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-return self._execute_with_wrappers(
+File "/usr/local/lib/python3.12/site-packages/django/core/management/base.py", line 107, in wrapper
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
-
-
-return executor(sql, params, many, context)
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
-
-
-with self.db.wrap_database_errors:
+res = handle_func(*args, **kwargs)
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+File "/usr/local/lib/python3.12/site-packages/django/core/management/commands/migrate.py", line 353, in handle
 
 
+post_migrate_state = executor.migrate(
 
-# 既存のボリュームを削除してクリーンな状態から起動
-docker-compose down -v
 
-# 再ビルドして起動
-docker-compose up -d --build
+^^^^^^^^^^^^^^^^^
 
-# ログを確認
-docker-compose logs -f app
+
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 135, in migrate
+
+
+state = self._migrate_all_forwards(
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 167, in _migrate_all_forwards
+
+
+state = self.apply_migration(
+
+
+^^^^^^^^^^^^^^^^^^^^^
+
+
+File "/usr/local/lib/python3.12/site-packages/django/db/migrations/executor.py", line 252, in apply_migration
+
+
+with self.connection.schema_editor(
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
