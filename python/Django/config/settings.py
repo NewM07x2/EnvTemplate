@@ -100,7 +100,7 @@ DATABASES = {
 }
 
 # Custom User Model
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'apps.users.CustomUser'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
