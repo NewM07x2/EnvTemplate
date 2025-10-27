@@ -28,7 +28,7 @@ GraphQLを使用することで、クライアントは必要なデータを効�
 import graphene
 from graphene_django import DjangoObjectType
 from .models import Sample, Category
-from .services import SampleService, CategoryService
+from .service.services import SampleService, CategoryService
 from apps.users.schema import UserType
 
 

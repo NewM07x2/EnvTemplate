@@ -1,32 +1,10 @@
-"""
-Postモデルの管理画面設定。
-
-このモジュールには、Django管理画面でのPostおよびCategoryモデルの表示方法をカスタマイズするクラスが含まれています。
-"""
-
 from django.contrib import admin
-from .models import Post, Category
+from ..models import Sample
 
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+@admin.register(Sample)
+class SampleAdmin(admin.ModelAdmin):
     """
-    Categoryモデルの管理画面設定。
-
-    表示フィールド、検索フィールド、フィルタリングオプションなどを定義します。
-    """
-    
-    list_display = ['name', 'slug', 'created_at']  # 一覧画面に表示するフィールド
-    list_filter = ['created_at']  # サイドバーでのフィルタリングオプション
-    search_fields = ['name', 'slug', 'description']  # 検索可能なフィールド
-    prepopulated_fields = {'slug': ('name',)}  # nameフィールドからslugを自動生成
-    ordering = ['name']  # デフォルトの並び順
-
-
-@admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
-    """
-    Postモデルの管理画面設定。
+    Sampleモデルの管理画面設定。
 
     表示フィールド、検索フィールド、フィルタリングオプション、
     および詳細画面のフィールドセットを定義します。

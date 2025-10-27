@@ -1,43 +1,6 @@
-"""
-REST API用のサンプルシリアライザ。
-
-このモジュールには、Django REST Frameworkを使用して、
-サンプルとカテゴリのデータをシリアライズおよびデシリアライズするためのクラスが含まれています。
-
-シリアライザの目的:
-- モデルインスタンスをJSON形式に変換してクライアントに返す (シリアライズ)。
-- クライアントから送信されたJSONデータを検証し、モデルインスタンスに変換する (デシリアライズ)。
-
-使用用途:
-- APIのエンドポイントでデータの入出力を管理する。
-- データの検証ロジックを簡潔に記述する。
-- ネストされたデータ構造を扱いやすくする。
-- クライアントから送信されたデータのバリデーションチェックを行う。
-  - 必須フィールドの確認。
-  - データ型や値の範囲の検証。
-  - カスタムバリデーションロジックの実装。
-- データの整形:
-  - クライアントに返すデータを整形し、必要な情報のみを含める。
-  - ネストされたデータ構造を簡単に扱えるようにする。
-- データの変換:
-  - モデルインスタンスをシリアライズしてJSON形式に変換。
-  - クライアントから送信されたJSONデータをデシリアライズしてモデルインスタンスに変換。
-- エラーメッセージの提供:
-  - バリデーションエラーが発生した場合、詳細なエラーメッセージをクライアントに返す。
-- APIの一貫性の確保:
-  - データの入出力形式を統一し、APIの一貫性を保つ。
-
-各シリアライザの役割:
-- `CategorySerializer`: カテゴリデータの読み取り専用シリアライザ。
-- `SampleSerializer`: サンプルデータの読み取り専用シリアライザ。
-- `SampleCreateSerializer`: サンプルデータの作成用シリアライザ。
-- `SampleUpdateSerializer`: サンプルデータの更新用シリアライザ。
-"""
-
 from rest_framework import serializers
-from .models import Sample, Category
+from ..models import Sample, Category
 from apps.users.serializers import UserSerializer
-
 
 class CategorySerializer(serializers.ModelSerializer):
     """
@@ -59,7 +22,6 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name', 'slug', 'description', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
-
 
 class SampleSerializer(serializers.ModelSerializer):
     """
@@ -99,7 +61,6 @@ class SampleSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at'
         ]
 
-
 class SampleCreateSerializer(serializers.ModelSerializer):
     """
     サンプルモデルの作成操作用シリアライザ。
@@ -123,7 +84,6 @@ class SampleCreateSerializer(serializers.ModelSerializer):
             'title', 'slug', 'content', 'excerpt',
             'category', 'is_published', 'published_at'
         ]
-
 
 class SampleUpdateSerializer(serializers.ModelSerializer):
     """
