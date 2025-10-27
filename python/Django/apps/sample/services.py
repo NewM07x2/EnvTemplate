@@ -1,6 +1,23 @@
-"""Sample service layer for business logic.
+"""
+ビジネスロジックのためのサンプルサービス層。
 
-Sample service layer implementation that can be copied and modified.
+このモジュールには、リポジトリを使用してビジネスロジックを実装するクラスが含まれています。
+
+サービス層の目的:
+- ビジネスロジックを集約し、ビューやコントローラーから分離する。
+- データベース操作をリポジトリに委譲し、コードの再利用性を向上させる。
+- アプリケーションのルールや制約を実装する。
+
+使用用途:
+- データの取得、作成、更新、削除などの操作を一元管理する。
+- 入力データの検証や、関連するデータの整合性を確保する。
+- 複数のリポジトリや外部サービスを統合して処理を行う。
+- ビジネスルールに基づいたエラーハンドリングを実装する。
+- データの状態に応じた追加処理 (例: 公開日時の自動設定、閲覧数のインクリメント) を行う。
+
+このモジュールに含まれるクラス:
+- `SampleService`: サンプルデータに関するビジネスロジックを管理。
+- `CategoryService`: カテゴリデータに関するビジネスロジックを管理。
 """
 
 from typing import List, Optional
@@ -11,26 +28,52 @@ from .repositories import SampleRepository, CategoryRepository
 
 
 class SampleService:
-    """Service for sample-related business logic."""
+    """
+    サンプル関連のビジネスロジックを管理するサービス。
+
+    このクラスは、リポジトリを使用してデータベース操作を行い、
+    アプリケーションのビジネスルールを実装します。
+    """
     
     def __init__(self):
         self.repository = SampleRepository()
         self.category_repository = CategoryRepository()
     
     def get_samples(self, skip: int = 0, limit: int = 100, published_only: bool = False) -> List[Sample]:
-        """Get all samples with pagination."""
+        """
+        ページネーションを使用してすべてのサンプルを取得します。
+
+        パラメータ:
+        - skip: スキップするレコード数。
+        - limit: 取得するレコードの最大数。
+        - published_only: 公開済みのサンプルのみを取得するかどうか。
+
+        戻り値:
+        - List[Sample]: サンプルのリスト。
+        """
         if skip < 0 or limit < 1:
-            raise ValidationError('Invalid pagination parameters')
+            raise ValidationError("Invalid pagination parameters.")
         
         if published_only:
             return list(self.repository.get_published(skip, limit))
         return list(self.repository.get_all(skip, limit))
     
     def get_sample(self, sample_id: int) -> Sample:
-        """Get sample by ID."""
+        """
+        IDでサンプルを取得します。
+
+        パラメータ:
+        - sample_id: サンプルの一意の識別子。
+
+        戻り値:
+        - Sample: 該当するサンプルオブジェクト。
+
+        例外:
+        - NotFound: サンプルが見つからない場合。
+        """
         sample = self.repository.get_by_id(sample_id)
         if not sample:
-            raise NotFound(f'Sample with id {sample_id} not found')
+            raise NotFound("Sample not found.")
         return sample
     
     def get_sample_by_slug(self, slug: str) -> Sample:
@@ -49,7 +92,16 @@ class SampleService:
         return list(self.repository.get_by_category(category_id, skip, limit))
     
     def create_sample(self, author_id: int, **kwargs) -> Sample:
-        """Create a new sample."""
+        """
+        新しいサンプルを作成します。
+
+        パラメータ:
+        - author_id: 作成者の一意の識別子。
+        - kwargs: サンプルのフィールドデータ。
+
+        戻り値:
+        - Sample: 作成されたサンプルオブジェクト。
+        """
         # Validate category if provided
         category_id = kwargs.get('category_id')
         if category_id:
@@ -65,12 +117,27 @@ class SampleService:
         return sample
     
     def update_sample(self, sample_id: int, user_id: int, is_staff: bool = False, **kwargs) -> Sample:
-        """Update sample information."""
+        """
+        既存のサンプルを更新します。
+
+        パラメータ:
+        - sample_id: 更新対象のサンプルID。
+        - user_id: 更新を試みるユーザーのID。
+        - is_staff: ユーザーがスタッフ権限を持つかどうか。
+        - kwargs: 更新するフィールドデータ。
+
+        戻り値:
+        - Sample: 更新されたサンプルオブジェクト。
+
+        例外:
+        - PermissionDenied: ユーザーが更新権限を持たない場合。
+        - NotFound: サンプルが見つからない場合。
+        """
         sample = self.get_sample(sample_id)
         
         # Check permissions
         if sample.author_id != user_id and not is_staff:
-            raise PermissionDenied('You can only update your own samples')
+            raise PermissionDenied("You do not have permission to update this sample.")
         
         # Validate category if being updated
         category_id = kwargs.get('category_id')
@@ -87,38 +154,88 @@ class SampleService:
         return sample
     
     def delete_sample(self, sample_id: int, user_id: int, is_staff: bool = False) -> bool:
-        """Delete a sample."""
+        """
+        サンプルを削除します。
+
+        パラメータ:
+        - sample_id: 削除対象のサンプルID。
+        - user_id: 削除を試みるユーザーのID。
+        - is_staff: ユーザーがスタッフ権限を持つかどうか。
+
+        戻り値:
+        - bool: 削除が成功した場合はTrue。
+
+        例外:
+        - PermissionDenied: ユーザーが削除権限を持たない場合。
+        - NotFound: サンプルが見つからない場合。
+        """
         sample = self.get_sample(sample_id)
         
         # Check permissions
         if sample.author_id != user_id and not is_staff:
-            raise PermissionDenied('You can only delete your own samples')
+            raise PermissionDenied("You do not have permission to delete this sample.")
         
         return self.repository.delete(sample)
     
     def increment_views(self, sample_id: int) -> Sample:
-        """Increment sample views count."""
+        """
+        サンプルの閲覧数をインクリメントします。
+
+        パラメータ:
+        - sample_id: 対象のサンプルID。
+
+        戻り値:
+        - Sample: 更新されたサンプルオブジェクト。
+        """
         sample = self.get_sample(sample_id)
         return self.repository.increment_views(sample)
     
     def search_samples(self, query: str) -> List[Sample]:
-        """Search samples."""
+        """
+        クエリ文字列に基づいてサンプルを検索します。
+
+        パラメータ:
+        - query: 検索クエリ文字列。
+
+        戻り値:
+        - List[Sample]: 一致するサンプルのリスト。
+        """
         return list(self.repository.search(query))
 
 
 class CategoryService:
-    """Service for category-related business logic."""
+    """
+    カテゴリ関連のビジネスロジックを管理するサービス。
+
+    このクラスは、カテゴリデータの取得や操作を行います。
+    """
     
     def __init__(self):
         self.repository = CategoryRepository()
     
     def get_categories(self) -> List[Category]:
-        """Get all categories."""
+        """
+        すべてのカテゴリを取得します。
+
+        戻り値:
+        - List[Category]: カテゴリのリスト。
+        """
         return list(self.repository.get_all())
     
     def get_category(self, category_id: int) -> Category:
-        """Get category by ID."""
+        """
+        IDでカテゴリを取得します。
+
+        パラメータ:
+        - category_id: カテゴリの一意の識別子。
+
+        戻り値:
+        - Category: 該当するカテゴリオブジェクト。
+
+        例外:
+        - NotFound: カテゴリが見つからない場合。
+        """
         category = self.repository.get_by_id(category_id)
         if not category:
-            raise NotFound(f'Category with id {category_id} not found')
+            raise NotFound("Category not found.")
         return category

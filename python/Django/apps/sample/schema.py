@@ -1,6 +1,28 @@
-"""Sample GraphQL schema.
+"""
+Sample GraphQLスキーマ。
 
-Sample GraphQL types, queries, and mutations that can be copied and modified.
+このモジュールには、GraphQLの型、クエリ、ミューテーションが含まれています。
+これらは、サンプルデータとカテゴリデータを操作するために使用されます。
+GraphQLを使用することで、クライアントは必要なデータを効率的に取得し、
+柔軟なデータ操作を実現できます。
+
+主な内容:
+- GraphQLタイプ: Djangoモデルに基づくデータ型を定義。
+  - `CategoryType`: カテゴリモデルのデータ型。
+  - `SampleType`: サンプルモデルのデータ型。
+- クエリ: データの取得操作を定義。
+  - `samples`: サンプルのリストを取得。
+  - `sample`: IDで特定のサンプルを取得。
+  - `sample_by_slug`: スラッグで特定のサンプルを取得。
+  - `samples_by_author`: 著者IDでサンプルを取得。
+  - `categories`: カテゴリのリストを取得。
+  - `category`: IDで特定のカテゴリを取得。
+- ミューテーション: データの作成、更新、削除操作を定義。
+  - `CreateSample`: 新しいサンプルを作成。
+  - `UpdateSample`: 既存のサンプルを更新。
+  - `DeleteSample`: サンプルを削除。
+
+これらのスキーマを通じて、クライアントは柔軟かつ効率的にデータを操作できます。
 """
 
 import graphene
@@ -11,7 +33,7 @@ from apps.users.schema import UserType
 
 
 class CategoryType(DjangoObjectType):
-    """GraphQL type for Category model."""
+    """カテゴリモデルのGraphQLタイプ。"""
     
     class Meta:
         model = Category
@@ -19,7 +41,7 @@ class CategoryType(DjangoObjectType):
 
 
 class SampleType(DjangoObjectType):
-    """GraphQL type for Sample model."""
+    """サンプルモデルのGraphQLタイプ。"""
     
     author = graphene.Field(UserType)
     category = graphene.Field(CategoryType)
@@ -34,7 +56,7 @@ class SampleType(DjangoObjectType):
 
 
 class SampleInput(graphene.InputObjectType):
-    """Input type for creating samples."""
+    """サンプル作成用の入力タイプ。"""
     title = graphene.String(required=True)
     slug = graphene.String(required=True)
     content = graphene.String(required=True)
@@ -44,7 +66,7 @@ class SampleInput(graphene.InputObjectType):
 
 
 class SampleUpdateInput(graphene.InputObjectType):
-    """Input type for updating samples."""
+    """サンプル更新用の入力タイプ。"""
     title = graphene.String()
     slug = graphene.String()
     content = graphene.String()
@@ -54,7 +76,7 @@ class SampleUpdateInput(graphene.InputObjectType):
 
 
 class SampleQuery(graphene.ObjectType):
-    """Sample queries."""
+    """サンプルに関するクエリ。"""
     
     samples = graphene.List(
         SampleType,
@@ -74,38 +96,38 @@ class SampleQuery(graphene.ObjectType):
     category = graphene.Field(CategoryType, id=graphene.Int(required=True))
     
     def resolve_samples(self, info, skip=0, limit=100, published_only=False):
-        """Get all samples with pagination."""
+        """ページネーション付きで全てのサンプルを取得。"""
         service = SampleService()
         return service.get_samples(skip=skip, limit=limit, published_only=published_only)
     
     def resolve_sample(self, info, id):
-        """Get sample by ID."""
+        """IDでサンプルを取得。"""
         service = SampleService()
         return service.get_sample(sample_id=id)
     
     def resolve_sample_by_slug(self, info, slug):
-        """Get sample by slug."""
+        """スラッグでサンプルを取得。"""
         service = SampleService()
         return service.get_sample_by_slug(slug=slug)
     
     def resolve_samples_by_author(self, info, author_id, skip=0, limit=100):
-        """Get samples by author."""
+        """著者IDでサンプルを取得。"""
         service = SampleService()
         return service.get_samples_by_author(author_id=author_id, skip=skip, limit=limit)
     
     def resolve_categories(self, info):
-        """Get all categories."""
+        """全てのカテゴリを取得。"""
         service = CategoryService()
         return service.get_categories()
     
     def resolve_category(self, info, id):
-        """Get category by ID."""
+        """IDでカテゴリを取得。"""
         service = CategoryService()
         return service.get_category(category_id=id)
 
 
 class CreateSample(graphene.Mutation):
-    """Mutation to create a new sample."""
+    """新しいサンプルを作成するミューテーション。"""
     
     class Arguments:
         input = SampleInput(required=True)
@@ -116,20 +138,20 @@ class CreateSample(graphene.Mutation):
     message = graphene.String()
     
     def mutate(self, info, input, author_id):
-        """Create new sample."""
+        """新しいサンプルを作成。"""
         service = SampleService()
         try:
             sample = service.create_sample(
                 author_id=author_id,
                 **input.__dict__
             )
-            return CreateSample(sample=sample, success=True, message='Sample created successfully')
+            return CreateSample(sample=sample, success=True, message='サンプルが正常に作成されました')
         except Exception as e:
             return CreateSample(sample=None, success=False, message=str(e))
 
 
 class UpdateSample(graphene.Mutation):
-    """Mutation to update a sample."""
+    """サンプルを更新するミューテーション。"""
     
     class Arguments:
         id = graphene.Int(required=True)
@@ -137,12 +159,12 @@ class UpdateSample(graphene.Mutation):
         input = SampleUpdateInput(required=True)
         is_staff = graphene.Boolean(default_value=False)
     
-    sample = graphene.Field(sampleType)
+    sample = graphene.Field(SampleType)
     success = graphene.Boolean()
     message = graphene.String()
     
     def mutate(self, info, id, user_id, input, is_staff=False):
-        """Update sample."""
+        """サンプルを更新。"""
         service = SampleService()
         try:
             sample = service.update_sample(
@@ -151,13 +173,13 @@ class UpdateSample(graphene.Mutation):
                 is_staff=is_staff,
                 **input.__dict__
             )
-            return UpdateSample(sample=sample, success=True, message='Sample updated successfully')
+            return UpdateSample(sample=sample, success=True, message='サンプルが正常に更新されました')
         except Exception as e:
             return UpdateSample(sample=None, success=False, message=str(e))
 
 
 class DeleteSample(graphene.Mutation):
-    """Mutation to delete a sample."""
+    """サンプルを削除するミューテーション。"""
     
     class Arguments:
         id = graphene.Int(required=True)
@@ -168,17 +190,17 @@ class DeleteSample(graphene.Mutation):
     message = graphene.String()
     
     def mutate(self, info, id, user_id, is_staff=False):
-        """Delete sample."""
+        """サンプルを削除。"""
         service = SampleService()
         try:
             service.delete_sample(sample_id=id, user_id=user_id, is_staff=is_staff)
-            return DeleteSample(success=True, message='Sample deleted successfully')
+            return DeleteSample(success=True, message='サンプルが正常に削除されました')
         except Exception as e:
             return DeleteSample(success=False, message=str(e))
 
 
 class SampleMutation(graphene.ObjectType):
-    """Sample mutations."""
+    """サンプルに関するミューテーション。"""
     
     create_sample = CreateSample.Field()
     update_sample = UpdateSample.Field()

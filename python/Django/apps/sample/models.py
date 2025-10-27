@@ -1,6 +1,6 @@
-"""Post models.
+"""Postモデル。
 
-Sample model that can be copied and modified for your own use cases.
+このモジュールには、サンプルとして使用できるPostおよびCategoryモデルが含まれています。
 """
 
 from django.db import models
@@ -9,7 +9,16 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Category(models.Model):
-    """Category model for posts."""
+    """
+    Postのカテゴリを表すモデル。
+
+    フィールド:
+    - name: カテゴリ名 (一意)。
+    - slug: URLフレンドリーな一意の識別子。
+    - description: カテゴリの説明 (任意)。
+    - created_at: 作成日時。
+    - updated_at: 更新日時。
+    """
     
     name = models.CharField(_('name'), max_length=100, unique=True)
     slug = models.SlugField(_('slug'), max_length=100, unique=True)
@@ -28,9 +37,24 @@ class Category(models.Model):
 
 
 class Sample(models.Model):
-    """Sample model.
-    
-    Sample implementation that can be customized for your needs.
+    """
+    サンプルモデル。
+
+    このモデルは、ブログ投稿や記事などのデータを表現するために使用できます。
+
+    フィールド:
+    - title: 投稿のタイトル。
+    - slug: URLフレンドリーな一意の識別子。
+    - content: 投稿の本文。
+    - excerpt: 投稿の要約 (任意)。
+    - author: 投稿の作成者 (外部キー)。
+    - category: 投稿のカテゴリ (外部キー、任意)。
+    - is_published: 公開ステータス。
+    - published_at: 公開日時 (任意)。
+    - views_count: 閲覧数。
+    - likes_count: いいね数。
+    - created_at: 作成日時。
+    - updated_at: 更新日時。
     """
     
     title = models.CharField(_('title'), max_length=255)
