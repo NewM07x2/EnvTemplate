@@ -38,19 +38,23 @@ REST API と GraphQL の両方をサポートしています。
 ## 技術スタック
 
 ### コア
+
 - **Python**: 3.12+
 - **Django**: 5.0+
 - **Django REST Framework**: 3.14+
 - **Graphene-Django**: 3.2+
 
 ### データベース
+
 - **PostgreSQL**: 16+ (推奨)
 
 ### 認証・セキュリティ
+
 - **djangorestframework-simplejwt**: JWT 認証
 - **django-cors-headers**: CORS サポート
 
 ### オプション機能（必要に応じて削除可能）
+
 - **Redis**: キャッシュ、セッション管理
 - **Celery**: バックグラウンドタスク処理
 - **django-celery-beat**: スケジュールタスク
@@ -475,4 +479,4 @@ MIT License
 
 ---
 
-**Happy Coding! 🚀**
+## Happy Coding! 🚀

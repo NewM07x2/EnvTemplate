@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     
     # Local apps
     'apps.users',
-    'apps.posts',
+    'apps.sample',
 ]
 
 # Add debug toolbar only in development
