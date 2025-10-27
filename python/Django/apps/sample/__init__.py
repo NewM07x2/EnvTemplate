@@ -1,3 +1,3 @@
-"""Sample app package."""
+"""Posts app package."""
 
-default_app_config = 'apps.sample.apps.SampleConfig'
+default_app_config = 'apps.posts.apps.PostsConfig'

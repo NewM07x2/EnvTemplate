@@ -18,3 +18,19 @@ Sample アプリケーションの URL ルーティング。
 from apps.sample.views import NewViewSet
 router.register(r'new-endpoint', NewViewSet, basename='new')
 ```
+"""
+
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
+# ルーターのインスタンスを作成
+router = DefaultRouter()
+# サンプル用のエンドポイントを登録
+# router.register(r'samples', PostViewSet, basename='sample')
+# カテゴリ用のエンドポイントを登録
+# router.register(r'categories', CategoryViewSet, basename='category')
+
+# URL パターンを定義
+urlpatterns = [
+    path('', include(router.urls)),  # ルーターで定義されたエンドポイントを含める
+]

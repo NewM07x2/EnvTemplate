@@ -1,5 +1,4 @@
-"""
-目的:
+"""目的:
 このファイルは、Djangoアプリケーション「Sample」の設定を管理するために使用されます。
 
 できること:
@@ -32,4 +31,4 @@ from django.apps import AppConfig
 class SampleConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.sample'
-    verbose_name = 'Sample'
+    verbose_name = 'Sample '
