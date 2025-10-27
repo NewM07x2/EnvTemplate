@@ -32,7 +32,7 @@ class Sample(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='posts',
+        related_name='samples',
         verbose_name=_('author')
     )
 
@@ -41,7 +41,7 @@ class Sample(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='posts',
+        related_name='samples',
         verbose_name=_('category')
     )
 
@@ -55,8 +55,8 @@ class Sample(models.Model):
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
 
     class Meta:
-        verbose_name = _('post')
-        verbose_name_plural = _('posts')
+        verbose_name = _('sample')
+        verbose_name_plural = _('samples')
         ordering = ['-created_at']
         indexes = [
             models.Index(fields=['slug']),
