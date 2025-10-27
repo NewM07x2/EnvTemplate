@@ -14,8 +14,11 @@ import strawberry
 
 @strawberry.type
 class User:
-    """GraphQL User type."""
-    
+    """GraphQL User 型
+
+    システム内のユーザーを表し、基本的なプロフィール情報を含みます。
+    """
+
     id: str
     email: str
     username: str
@@ -28,8 +31,11 @@ class User:
 
 @strawberry.type
 class Post:
-    """GraphQL Post type."""
-    
+    """GraphQL Post 型
+
+    ユーザーが作成したブログ記事や投稿を表します。
+    """
+
     id: str
     title: str
     content: Optional[str]
@@ -43,8 +49,11 @@ class Post:
 
 @strawberry.input
 class UserCreateInput:
-    """Input type for creating a user."""
-    
+    """ユーザー作成用の入力型
+
+    新しいユーザーを作成する際に必要なデータを提供します。
+    """
+
     email: str
     username: str
     password: str
