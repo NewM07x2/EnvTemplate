@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
-from .models import Sample
-from .service.services import SampleService
+from ..models import Sample
+from ..service.services import SampleService
 from apps.users.schema import UserType
 from .category_schema import CategoryType
 
