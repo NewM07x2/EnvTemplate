@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     
     # Local apps
+    'apps.users',
     'apps.sample',
 ]
 
@@ -100,7 +101,7 @@ DATABASES = {
 }
 
 # Custom User Model
-AUTH_USER_MODEL = 'apps.users.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
