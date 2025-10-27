@@ -31,4 +31,5 @@ from django.apps import AppConfig
 class SampleConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.sample'
+    label = 'sample'  # This sets the app_label to 'sample' for model references
     verbose_name = 'Sample'

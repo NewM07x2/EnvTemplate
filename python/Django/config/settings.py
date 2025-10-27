@@ -101,7 +101,10 @@ DATABASES = {
 }
 
 # Custom User Model
-AUTH_USER_MODEL = 'apps.users.CustomUser'
+# Note: AUTH_USER_MODEL must be in format 'app_label.ModelName' (only 2 parts)
+# Since our app is 'apps.users', we use the full app path in INSTALLED_APPS
+# but only the last part for AUTH_USER_MODEL
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
