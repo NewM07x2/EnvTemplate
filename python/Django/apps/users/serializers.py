@@ -1,9 +1,11 @@
-"""User serializers for REST API.
-
-Sample serializers that can be copied and modified.
-"""
-
 from rest_framework import serializers
+from .models.user_model import User
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'is_active', 'date_joined']
+
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
