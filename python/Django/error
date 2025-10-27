@@ -1,58 +1,58 @@
-File "/usr/local/lib/python3.12/site-packages/django/db/models/base.py", line 196, in __new__
+File "/usr/local/lib/python3.12/importlib/__init__.py", line 90, in import_module
 
 
-new_class.add_to_class(obj_name, obj)
+return _bootstrap._gcd_import(name[level:], package, level)
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/models/base.py", line 373, in add_to_class
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-value.contribute_to_class(cls, name)
+File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/models/fields/related.py", line 928, in contribute_to_class
+File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
 
 
-super().contribute_to_class(cls, name, private_only=private_only, **kwargs)
+File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/models/fields/related.py", line 380, in contribute_to_class
+File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
 
 
-lazy_related_operation(
+File "<frozen importlib._bootstrap_external>", line 999, in exec_module
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/models/fields/related.py", line 88, in lazy_related_operation
+File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
 
 
-return apps.lazy_model_operation(partial(function, **kwargs), *model_keys)
+File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/admin.py", line 6, in <module>
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+from django.contrib.auth.forms import (
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/models/fields/related.py", line 86, in <genexpr>
+File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/forms.py", line 20, in <module>
 
 
-model_keys = (make_model_tuple(m) for m in models)
+UserModel = get_user_model()
 
 
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 
-File "/usr/local/lib/python3.12/site-packages/django/db/models/utils.py", line 22, in make_model_tuple
+File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/__init__.py", line 289, in get_user_model
 
 
-raise ValueError(
+raise ImproperlyConfigured(
 
 
-ValueError: Invalid model reference 'apps.users.User'. String model references must be of the form 'app_label.ModelName'.
+django.core.exceptions.ImproperlyConfigured: AUTH_USER_MODEL refers to model 'users.User' that has not been installed
 
 
-[2025-10-27 18:25:04 +0900] [11] [INFO] Worker exiting (pid: 11)
+[2025-10-27 18:34:48 +0900] [11] [INFO] Worker exiting (pid: 11)
 
 
-[2025-10-27 09:25:04 +0000] [1] [ERROR] Worker (pid:11) exited with code 3
+[2025-10-27 09:34:48 +0000] [1] [ERROR] Worker (pid:11) exited with code 3
 
 
 Traceback (most recent call last):
