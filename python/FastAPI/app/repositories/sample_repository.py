@@ -145,3 +145,18 @@ class PostRepository:
             return True
         except Exception:
             return False
+
+
+class SampleRepository:
+    """A sample repository for data operations"""
+
+    def __init__(self):
+        self._data_store = {}
+
+    def add_item(self, key: str, value: str):
+        """Adds an item to the data store"""
+        self._data_store[key] = value
+
+    def get_item(self, key: str) -> str:
+        """Retrieves an item from the data store"""
+        return self._data_store.get(key, "Item not found")
