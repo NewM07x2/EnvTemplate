@@ -1,7 +1,7 @@
 from ..models.user_model import User
 
 class UserRepository:
-    """Repository for User model."""
+    """ユーザーモデルのリポジトリ。"""
 
     @staticmethod
     def get_all_users():

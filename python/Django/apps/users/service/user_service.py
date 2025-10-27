@@ -1,7 +1,7 @@
 from ..repositories.user_repository import UserRepository
 
 class UserService:
-    """Service layer for User operations."""
+    """ユーザー操作のサービス層。"""
 
     @staticmethod
     def list_users():

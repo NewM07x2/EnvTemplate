@@ -1,4 +1,5 @@
-from django.urls import path, include"""User URLs."""
+from django.urls import path, include
+"""ユーザーのURL設定。"""
 
 from .views.user_views import UserViewSet
 from rest_framework.routers import DefaultRouter

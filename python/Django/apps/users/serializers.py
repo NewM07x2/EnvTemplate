@@ -12,7 +12,7 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """User serializer for read operations."""
+    """ユーザーの読み取り操作用シリアライザー。"""
     
     full_name = serializers.ReadOnlyField()
     
@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    """User serializer for create operations."""
+    """ユーザー作成操作用シリアライザー."""
     
     password = serializers.CharField(write_only=True, min_length=8)
     password_confirm = serializers.CharField(write_only=True, min_length=8)
@@ -40,13 +40,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
         ]
     
     def validate(self, attrs):
-        """Validate passwords match."""
+        """パスワードが一致することを確認します."""
         if attrs.get('password') != attrs.pop('password_confirm', None):
-            raise serializers.ValidationError({'password': 'Passwords do not match'})
+            raise serializers.ValidationError({'password': 'パスワードが一致しません'})
         return attrs
     
     def create(self, validated_data):
-        """Create user with hashed password."""
+        """ハッシュ化されたパスワードでユーザーを作成します."""
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
@@ -55,7 +55,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
-    """User serializer for update operations."""
+    """ユーザー更新操作用シリアライザー."""
     
     class Meta:
         model = User
@@ -63,14 +63,14 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    """Serializer for password change."""
+    """パスワード変更用シリアライザー."""
     
     old_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True, min_length=8)
     new_password_confirm = serializers.CharField(write_only=True, min_length=8)
     
     def validate(self, attrs):
-        """Validate passwords match."""
+        """新しいパスワードが一致することを確認します."""
         if attrs.get('new_password') != attrs.get('new_password_confirm'):
-            raise serializers.ValidationError({'new_password': 'Passwords do not match'})
+            raise serializers.ValidationError({'new_password': 'パスワードが一致しません'})
         return attrs
