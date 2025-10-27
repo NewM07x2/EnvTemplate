@@ -21,8 +21,9 @@ urlpatterns = [
     path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True)), name='graphql'),
     
     # API endpoints
-    path('api/', include('apps.users.urls')),
-    path('api/', include('apps.posts.urls')),
+    path('api/sample/', include('apps.sample.urls')),
+    path('api/users/', include('apps.users.urls')),
+    path('api/posts/', include('apps.posts.urls')),
     
     # Health check
     path('health/', include('core.urls')),
