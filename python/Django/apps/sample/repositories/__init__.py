@@ -1,2 +1,0 @@
-from .category_repository import CategoryRepository
-from .sample_repository import SampleRepository

@@ -1,4 +1,5 @@
-"""目的:
+"""
+目的:
 このファイルは、Djangoアプリケーション「Sample」の設定を管理するために使用されます。
 
 できること:
@@ -18,17 +19,3 @@
 - `ready` メソッドをオーバーライドして、アプリケーションの初期化処理を追加することが可能です。
 
 備考:
-- よく使用する内容:
-  - `default_auto_field`: モデルの主キーに使用されるデフォルトのフィールドタイプを指定する際に使用。
-  - `name`: アプリケーションのPythonパスを指定する際に使用。
-  - `verbose_name`: 管理画面でのアプリケーション名をカスタマイズする際に使用。
-  - `ready` メソッド: アプリケーションの初期化処理を追加する際に使用。
-"""
-
-from django.apps import AppConfig
-
-
-class SampleConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.sample'
-    verbose_name = 'Sample '
