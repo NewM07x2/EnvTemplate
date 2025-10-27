@@ -22,8 +22,8 @@ urlpatterns = [
     
     # API endpoints
     path('api/sample/', include('apps.sample.urls')),
-    path('api/users/', include('apps.users.urls')),
-    path('api/posts/', include('apps.posts.urls')),
+    # path('api/users/', include('apps.users.urls')),  # Uncomment when users URLs are ready
+    # path('api/posts/', include('apps.posts.urls')),  # Uncomment when posts URLs are ready
     
     # Health check
     path('health/', include('core.urls')),

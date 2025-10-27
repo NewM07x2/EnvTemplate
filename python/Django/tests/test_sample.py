@@ -5,7 +5,7 @@ These tests can be copied and modified for your own test cases.
 
 import pytest
 from django.contrib.auth import get_user_model
-from apps.posts.models import Post, Category
+# from apps.sample.models import Sample, Category
 
 User = get_user_model()
 
