@@ -317,3 +317,7 @@ self.setup_schedule()
 
 
 File "/usr/local/lib/python3.12/site-packages/django_celery_beat/schedulers.py", line 260, in setup_schedule
+
+
+
+docker-compose exec app python manage.py makemigrations users
