@@ -188,20 +188,60 @@ python main.py
 
 ### Docker使用
 
-```bash
-# .env.dockerファイルを編集 (必要に応じて)
-#  キャッシュを削除してビルト
-docker-compose build --no-cache
+Dockerを使用してFastAPIアプリケーションを簡単に起動できます。以下の手順に従ってください。
 
-# Docker Composeでサービスを起動
-docker-compose up --build -d
+#### **1. 環境変数の設定**
+- `.env.example`をコピーして`.env`を作成します。
+  ```bash
+  cp .env.example .env
+  ```
+- 必要に応じて`.env`ファイルの内容を編集します。
 
-# ログの確認
-docker-compose logs -f app
+#### **2. Dockerイメージのビルド**
+- 以下のコマンドを実行して、Dockerイメージをビルドします。
+  ```bash
+  docker-compose build
+  ```
 
-# サービスの停止
-docker-compose down
-```
+#### **3. サービスの起動**
+- 以下のコマンドでサービスをバックグラウンドで起動します。
+  ```bash
+  docker-compose up -d
+  ```
+
+#### **4. ログの確認**
+- アプリケーションのログを確認するには、以下のコマンドを実行します。
+  ```bash
+  docker-compose logs -f app
+  ```
+
+#### **5. アプリケーションへのアクセス**
+- 起動後、以下のURLにアクセスしてアプリケーションを確認できます。
+  - **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+  - **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+  - **GraphQL Playground**: [http://localhost:8000/graphql](http://localhost:8000/graphql)
+
+#### **6. サービスの停止**
+- サービスを停止するには、以下のコマンドを実行します。
+  ```bash
+  docker-compose down
+  ```
+
+#### **7. 初回セットアップ（必要に応じて）**
+- **Prisma Clientの生成**:
+  ```bash
+  docker-compose run app prisma generate
+  ```
+- **データベースのマイグレーション**:
+  ```bash
+  docker-compose run app prisma db push
+  ```
+
+#### **8. 注意点**
+- **ボリュームの削除**:
+  - ボリュームを削除した場合、Prisma Clientの再生成とデータベースのマイグレーションが必要です。
+- **本番環境**:
+  - 本番環境では、`docker-compose.override.yml`を使用して開発用設定を分離することを推奨します。
 
 ## 使用方法
 
