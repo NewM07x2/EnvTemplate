@@ -271,12 +271,15 @@ poetry install
 ```powershell
 # マイグレーションファイルの作成
 python manage.py makemigrations
+docker-compose exec app python manage.py makemigrations
 
 # マイグレーションの実行
 python manage.py migrate
+docker-compose exec app python manage.py migrate
 
 # スーパーユーザーの作成
 python manage.py createsuperuser
+docker-compose exec app python manage.py createsuperuser
 ```
 
 ### 4. 開発サーバーの起動
