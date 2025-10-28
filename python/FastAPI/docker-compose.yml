@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  # PostgreSQL Database
+  # PostgreSQL データベース
   postgres:
     image: postgres:16-alpine
     container_name: fastapi-postgres
@@ -21,7 +21,7 @@ services:
     networks:
       - app-network
 
-  # Redis Cache (Optional - can be removed)
+  # Redis キャッシュ（オプション - 必要に応じて削除可能）
   redis:
     image: redis:7-alpine
     container_name: fastapi-redis
@@ -37,11 +37,12 @@ services:
     networks:
       - app-network
 
-  # FastAPI Application
+  # FastAPI アプリケーション
   app:
     build:
       context: .
       dockerfile: Dockerfile
+      target: final
     container_name: fastapi-app
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-fastapi_db}
