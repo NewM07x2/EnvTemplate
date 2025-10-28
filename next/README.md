@@ -125,6 +125,38 @@ bun start
    docker-compose down
    ```
 
+### その他のコマンド
+
+- **キャッシュを削除してビルドする場合**:
+
+  ```bash
+  docker-compose build --no-cache
+  ```
+
+- **ボリュームを削除して再ビルドする場合**:
+
+  ```bash
+  docker-compose down -v && docker-compose up --build
+  ```
+
+- **バックグラウンドでコンテナを起動する場合**:
+
+  ```bash
+  docker-compose up -d
+  ```
+
+- **実行中のコンテナを確認する場合**:
+
+  ```bash
+  docker ps
+  ```
+
+- **コンテナのログを確認する場合**:
+
+  ```bash
+  docker-compose logs
+  ```
+
 ### Docker 関連のフォルダ構成
 
 ```plaintext
