@@ -204,6 +204,9 @@ docker-compose down -v
 # イメージも削除する場合（完全クリーン）
 docker-compose down -v --rmi all
 
+# キャッシュをクリアして再ビルド
+docker-compose build --no-cache
+
 # 再度ビルドして起動
 docker-compose up -d --build
 

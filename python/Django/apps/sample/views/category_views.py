@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from ..models import Category
-from ..serializers.serializers import CategorySerializer
+from ..serializers.category_serializer import CategorySerializer
 from ..service.category_service import CategoryService
 
 # カテゴリ関連のビューを定義
