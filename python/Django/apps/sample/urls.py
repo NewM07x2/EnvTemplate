@@ -20,7 +20,7 @@ from apps.sample.views import NewViewSet
 router.register(r'new-endpoint', NewViewSet, basename='new')
 ```
 """
-from apps.sample.views import views
+
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
@@ -41,5 +41,5 @@ router.register(r'about', AboutViewSet, basename='about')
 # URL パターンを定義
 urlpatterns = [
     # path('XXXX/', views.XXXX, name='XXXX'),  # 追加のエンドポイントがあればここに記述
-    path('', include(router.urls())),
+    path('', include(router.urls)),
 ]

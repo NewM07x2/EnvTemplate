@@ -16,7 +16,9 @@ class About(models.Model):
     - updated_at: 更新日時。
     """
 
-    id = models.CharField(_('id'), max_length=255)
+    # Django は自動的に id フィールドを作成するため、明示的に定義する必要はありません
+    # id = models.CharField(_('id'), max_length=255)
+
     context = models.CharField(_('context'), max_length=255)
 
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
