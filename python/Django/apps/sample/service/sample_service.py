@@ -1,4 +1,4 @@
-from ..models import Sample
+from ..models.sample_model import Sample
 
 class SampleService:
     """

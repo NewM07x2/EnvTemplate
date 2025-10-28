@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from ..models import Sample, Category
-from apps.users.serializers import UserSerializer
+from ..models.sample_model import Sample
+from ..models.category_model import Category
+from ..models.sample_model import Sample
+from ...users.serializer import UserSerializer
 
 class CategorySerializer(serializers.ModelSerializer):
     """

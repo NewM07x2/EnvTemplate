@@ -1,4 +1,4 @@
-from ..models import Category
+from ..models.category_model import Category
 
 class CategoryService:
     """

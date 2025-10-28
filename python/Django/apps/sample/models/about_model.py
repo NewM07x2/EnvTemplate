@@ -10,12 +10,14 @@ class About(models.Model):
     このモデルは、idを更新するためのモデルです。
 
     フィールド:
-    - about_id: 投稿のタイトル。
+    - id: 投稿のID。
+    - context: 投稿のテキスト。
     - created_at: 作成日時。
     - updated_at: 更新日時。
     """
 
-    about_id = models.CharField(_('about_id'), max_length=255)
+    id = models.CharField(_('id'), max_length=255)
+    context = models.CharField(_('context'), max_length=255)
 
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
@@ -25,9 +27,9 @@ class About(models.Model):
         verbose_name_plural = _('abouts')
         ordering = ['-created_at']
         indexes = [
-            models.Index(fields=['about_id']),
+            models.Index(fields=['id']),
             models.Index(fields=['-created_at']),
         ]
 
     def __str__(self):
-        return self.about_id
+        return self.context

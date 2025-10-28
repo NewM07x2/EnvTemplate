@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
-from ..models import Category
-from ..service.services import CategoryService
+from ..models.category_model import Category
+from ..service.category_service import CategoryService
 
 class CategoryType(DjangoObjectType):
     """カテゴリモデルのGraphQLタイプ。"""

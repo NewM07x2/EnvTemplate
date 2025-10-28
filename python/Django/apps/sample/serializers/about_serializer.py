@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import About
+from ..models.about_model import About
 
 class AboutSerializer(serializers.ModelSerializer):
     """
@@ -10,14 +10,12 @@ class AboutSerializer(serializers.ModelSerializer):
 
     フィールド:
     - id: カテゴリの一意の識別子 (読み取り専用)。
-    - name: カテゴリ名。
-    - slug: URLフレンドリーな一意の識別子。
-    - description: カテゴリの説明。
+    - context: カテゴリ名。
     - created_at: カテゴリの作成日時 (読み取り専用)。
     - updated_at: カテゴリの更新日時 (読み取り専用)。
     """
     
     class Meta:
         model = About
-        fields = ['id', 'created_at', 'updated_at']
+        fields = ['id', 'context', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']

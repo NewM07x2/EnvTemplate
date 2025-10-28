@@ -1,4 +1,4 @@
-from ..models import About
+from ..models.about_model import About
 
 class AboutService:
     """

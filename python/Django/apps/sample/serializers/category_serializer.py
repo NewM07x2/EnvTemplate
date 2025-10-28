@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Category
+from ..models.category_model import Category
 
 class CategorySerializer(serializers.ModelSerializer):
     """
