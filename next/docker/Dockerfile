@@ -6,9 +6,12 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json (or yarn.lock) into the container
 COPY package*.json ./
+COPY prisma ./prisma/
 
 # Install dependencies
 RUN npm install
+
+RUN npx prisma generate
 
 # Copy the rest of the application code into the container
 COPY . .

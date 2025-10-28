@@ -2,7 +2,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import Link from 'next/link';
-import { Button } from '@/';
 import { PrismaClient } from "@prisma/client";
 
 export default function GraphqlPage() {
