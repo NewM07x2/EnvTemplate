@@ -21,6 +21,7 @@ COPY requirements.txt .
 
 # Python 依存関係をインストール
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt graphene
 
 # 最終ステージとして軽量なイメージを使用
 FROM python:3.12-slim AS final
@@ -31,6 +32,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 # 作業ディレクトリを設定
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libatomic1 \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
 
 # ベースステージから依存関係をコピー
 COPY --from=base /usr/local/lib/python3.12 /usr/local/lib/python3.12
