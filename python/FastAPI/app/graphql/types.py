@@ -89,3 +89,19 @@ class PostUpdateInput:
     title: Optional[str] = None
     content: Optional[str] = None
     published: Optional[bool] = None
+
+
+# ==================== Queries and Mutations ====================
+
+@strawberry.type
+class Query:
+    @strawberry.field
+    def hello(self) -> str:
+        return "Hello, world!"
+
+
+@strawberry.type
+class Mutation:
+    @strawberry.mutation
+    def say_hello(self, name: str) -> str:
+        return f"Hello, {name}!"

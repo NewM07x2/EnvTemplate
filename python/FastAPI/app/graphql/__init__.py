@@ -1,4 +1,7 @@
-"""GraphQL package initialization."""
+"""GraphQL package initialization.
+
+This package contains GraphQL-related modules and functionality.
+"""
 
 from app.graphql.schema import graphql_schema
 
