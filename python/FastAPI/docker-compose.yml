@@ -56,14 +56,10 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    volumes:
-      - ./app:/app/app
-      - ./main.py:/app/main.py
     networks:
       - app-network
     command: >
       sh -c "
-        prisma generate &&
         prisma db push &&
         uvicorn main:app --host 0.0.0.0 --port 8000 --reload
       "
