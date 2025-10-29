@@ -27,4 +27,4 @@ class Mutation:
     create_post = create_post
     create_user = create_user
 
-strawberry_schema = strawberry.Schema(query=Query, mutation=Mutation)
+graphql_schema = strawberry.Schema(query=Query, mutation=Mutation)
