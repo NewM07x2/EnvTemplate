@@ -9,7 +9,7 @@ Datasource "db": PostgreSQL database "fastapi_db", schema "public" at "postgres:
 
 
 
-🚀 Your database is now in sync with your Prisma schema. Done in 84ms
+🚀 Your database is now in sync with your Prisma schema. Done in 59ms
 
 
 
@@ -23,7 +23,7 @@ Running generate... - Prisma Client Python (v0.15.0)
 ✔ Generated Prisma Client Python (v0.15.0) to ./../usr/local/lib/python3.12/site
 
 
--packages/prisma in 119ms
+-packages/prisma in 95ms
 
 
 
