@@ -21,7 +21,6 @@ COPY requirements.txt .
 
 # Python 依存関係をインストール
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt graphene
 
 # 最終ステージとして軽量なイメージを使用
 FROM python:3.12-slim AS final

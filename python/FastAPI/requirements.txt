@@ -35,3 +35,5 @@ flake8==7.1.1
 mypy==1.11.2
 pre-commit==3.8.0
 email-validator>=2.0.0
+
+graphene==3.3.2
