@@ -1,7 +1,6 @@
 """GraphQL schema configuration."""
 
 import strawberry
-from graphene import ObjectType, String, Schema
 from app.graphql.resolvers import Mutation, Query
 from app.graphql.resolvers.mutations.post_mutations import create_post
 from app.graphql.resolvers.mutations.user_mutations import create_user
