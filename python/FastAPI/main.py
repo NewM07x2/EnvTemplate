@@ -10,7 +10,7 @@ from strawberry.fastapi import GraphQLRouter
 from app.api import api_router
 from app.core.config import settings
 from app.core.database import prisma
-from app.graphql.schema import graphql_schema
+from app.graphql.schemas.schema import graphql_schema
 from app.middleware.logging_middleware import LoggingMiddleware
 from app.middleware.timing_middleware import TimingMiddleware
 
