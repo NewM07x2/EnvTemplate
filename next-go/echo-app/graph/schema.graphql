@@ -1,0 +1,9 @@
+# GraphQL schema definition
+
+type Query {
+  hello: String!
+}
+
+type Mutation {
+  ping: String!
+}
