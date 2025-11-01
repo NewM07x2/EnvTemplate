@@ -498,6 +498,7 @@ MIT License
 # `example` はデフォルトのデータベース名
 # 必要に応じて適切な値に置き換えてください
 docker-compose exec db psql -U postgres -d example
+docker-compose exec db psql -U django_user -d django_db
 ```
 
 #### データベースのバックアップ
@@ -505,7 +506,7 @@ docker-compose exec db psql -U postgres -d example
 ```powershell
 # データベースのバックアップを取得
 # `backup.sql` は出力ファイル名
-docker-compose exec db pg_dump -U postgres -d example > backup.sql
+docker-compose exec db pg_dump -U django_user -d django_db > backup.sql
 ```
 
 #### データベースのリストア
@@ -513,76 +514,80 @@ docker-compose exec db pg_dump -U postgres -d example > backup.sql
 ```powershell
 # データベースのバックアップをリストア
 # `backup.sql` はバックアップファイル名
-docker-compose exec -T db psql -U postgres -d example < backup.sql
+docker-compose exec -T db psql -U django_user -d django_db < backup.sql
 ```
 
 #### データベースの状態確認
 
 ```powershell
 # データベースの一覧を表示
-docker-compose exec db psql -U postgres -c "\l"
+docker-compose exec db psql -U django_user -d django_db -c "\l"
 
 # テーブルの一覧を表示
-docker-compose exec db psql -U postgres -d example -c "\dt"
+docker-compose exec db psql -U django_user -d django_db -c "\dt"
 
 # 特定のテーブルのスキーマを表示
-docker-compose exec db psql -U postgres -d example -c "\d テーブル名"
+docker-compose exec db psql -U django_user -d django_db -c "\d テーブル名"
 ```
 
 #### データベースの接続確認
 
 ```powershell
 # PostgreSQL コンテナに接続して接続状態を確認
-docker-compose exec db psql -U postgres -c "SELECT version();"
+docker-compose exec db psql -U django_user -c "SELECT version();"
 ```
 
 #### データベースのユーザー作成
 
 ```powershell
 # 新しいユーザーを作成
-docker-compose exec db psql -U postgres -c "CREATE USER new_user WITH PASSWORD 'password';"
+docker-compose exec db psql -U django_user -c "CREATE USER new_user WITH PASSWORD 'password';"
 
 # 作成したユーザーに権限を付与
-docker-compose exec db psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE example TO new_user;"
+docker-compose exec db psql -U django_user -c "GRANT ALL PRIVILEGES ON DATABASE django_db TO new_user;"
 ```
 
 #### データベースのクリーンアップ
 
 ```powershell
 # 特定のテーブルを削除
-docker-compose exec db psql -U postgres -d example -c "DROP TABLE テーブル名;"
+docker-compose exec db psql -U django_user -d django_db -c "DROP TABLE テーブル名;"
 
 # データベース全体をリセット（注意: すべてのデータが削除されます）
-docker-compose exec db psql -U postgres -c "DROP DATABASE example;"
+docker-compose exec db psql -U django_user -c "DROP DATABASE django_db;"
 
 # 新しいデータベースを作成
-docker-compose exec db psql -U postgres -c "CREATE DATABASE example;"
+docker-compose exec db psql -U django_user -c "CREATE DATABASE django_db;"
 ```
 
 #### データベースのインデックス確認
 
 ```powershell
 # テーブルのインデックスを確認
-docker-compose exec db psql -U postgres -d example -c "\di"
+docker-compose exec db psql -U django_user -d django_db -c "\di"
 ```
 
 ### データ挿入用のSQL例
 
 #### Aboutモデル
-
 ```sql
-INSERT INTO apps_sample_about (id, context, created_at, updated_at)
-VALUES ('1', 'サンプルコンテキスト', NOW(), NOW());
+INSERT INTO sample_about (id, context, created_at, updated_at)
+VALUES ('1', 'Sample context', NOW(), NOW());
 ```
 
 #### Categoryモデル
 
 ```sql
-INSERT INTO apps_sample_category (name, slug, description, created_at, updated_at)
+INSERT INTO sample_category (name, slug, description, created_at, updated_at)
 VALUES ('テクノロジー', 'technology', '技術に関するカテゴリ', NOW(), NOW());
 ```
 
 #### Sampleモデル
+
+```sql
+INSERT INTO sample_sample (title, slug, content, excerpt, author_id, category_id, is_published, published_at, views_count, likes_count, created_at, updated_at)
+VALUES ('サンプルタイトル', 'sample-title', 'これはサンプルコンテンツです。', 'これはサンプル要約です。', 1, 1, TRUE, NOW(), 0, 0, NOW(), NOW());
+```
 
 ```sql
 INSERT INTO apps_sample_sample (title, slug, content, excerpt, author_id, category_id, is_published, published_at, views_count, likes_count, created_at, updated_at)

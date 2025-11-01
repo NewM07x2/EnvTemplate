@@ -15,17 +15,17 @@ from ..service.sample_service import SampleService
 
 # サンプル関連のビューを定義
 
-def sample_list(request):
-    """
-    サンプルの一覧を表示するビュー。
-    """
-    pass
+# def sample_list(request):
+#     """
+#     サンプルの一覧を表示するビュー。
+#     """
+#     pass
 
-def sample_detail(request, sample_id):
-    """
-    特定のサンプルの詳細を表示するビュー。
-    """
-    pass
+# def sample_detail(request, sample_id):
+#     """
+#     特定のサンプルの詳細を表示するビュー。
+#     """
+#     pass
 
 @extend_schema_view(
     list=extend_schema(summary="すべてのサンプルを一覧表示", tags=["samples"]),
