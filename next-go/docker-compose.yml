@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  # PostgreSQL データベース
+  postgres:
+    image: postgres:16-alpine
+    container_name: nextgo-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-nextgo_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # Go Echo API バックエンド
+  api:
+    build:
+      context: ./echo-app
+      dockerfile: ./docker/Dockerfile
+    container_name: nextgo-api
+    environment:
+      - PORT=8080
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${POSTGRES_USER:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - DB_NAME=${POSTGRES_DB:-nextgo_db}
+      - FRONTEND_URL=http://localhost:3000
+    ports:
+      - "${API_PORT:-8080}:8080"
+    volumes:
+      - ./echo-app:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # Next.js フロントエンド
+  frontend:
+    build:
+      context: ./next
+      dockerfile: ./docker/Dockerfile
+    container_name: nextgo-frontend
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      - NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:8080/graphql
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    volumes:
+      - ./next:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+    networks:
+      - app-network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
