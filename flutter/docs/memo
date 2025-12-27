@@ -1,0 +1,18 @@
+flutter_animation.md — UIリッチ化の基礎（Implicit/Explicit, AnimationController, Tween, Hero, パフォーマンス）
+理由: UX向上に直結。複雑な遷移や研究用途で多用。
+flutter_testing_advanced.md — Golden、モック、CI統合、統合テスト戦略
+理由: 品質担保の基盤。CIでの自動化は運用で必須。
+flutter_performance.md — プロファイリング、メモリ/描画最適化、DevToolsの実例
+理由: 大規模アプリや研究での定量評価に必要。
+中優先（実用性・運用で有益）
+4. flutter_native_integration.md — Platform Channels、ネイティブAPI呼び出し、プラグイン作成
+5. flutter_firebase_integration.md — Auth/Firestore/FCM等（サーバレス構成の実践）
+6. flutter_offline_and_sync.md — オフラインファースト、ローカルDBと同期戦略
+
+低〜中優先（専門性高め・チーム運用向け）
+7. flutter_security.md — トークン管理、secure_storage、脆弱性対策
+8. flutter_ci_cd.md — GitHub Actions, Codemagic, Bitrise のサンプルパイプライン
+9. flutter_plugins_and_packages.md — パッケージ選定、メンテ手法、pub.dev公開
+10. flutter_observability.md — ログ・エラー収集・トレーシング（Sentry, Crashlytics, OpenTelemetry）
+11. flutter_graphics_shaders.md — Skia/Fragment shader、カスタム描画（高度な研究向け）
+12. flutter_package_dev.md — 自作パッケージの設計・テスト・公開手順
