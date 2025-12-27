@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  # PostgreSQL データベース
+  postgres:
+    image: postgres:16-alpine
+    container_name: nextpy-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-nextpy_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # FastAPI バックエンド
+  api:
+    build:
+      context: ./FastAPI
+      dockerfile: Dockerfile
+    container_name: nextpy-api
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-nextpy_db}
+      - APP_ENV=development
+      - DEBUG=True
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./FastAPI:/app
+      - /app/__pycache__
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    command: >
+      sh -c "
+        prisma db push &&
+        uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+  # Next.js フロントエンド
+  frontend:
+    build:
+      context: ./next
+      dockerfile: ./docker/Dockerfile
+    container_name: nextpy-frontend
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:8000/graphql
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    volumes:
+      - ./next:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+    networks:
+      - app-network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

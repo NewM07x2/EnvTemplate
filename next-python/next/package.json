@@ -10,15 +10,16 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^6.4.1",
     "@reduxjs/toolkit": "^2.2.7",
     "@storybook/react": "^8.2.9",
     "@storybook/test": "^8.2.9",
+    "@urql/next": "^1.1.1",
+    "graphql": "^16.8.1",
     "next": "14.1.0",
-    "prisma": "^6.4.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-redux": "^9.1.2"
+    "react-redux": "^9.1.2",
+    "urql": "^4.0.6"
   },
   "devDependencies": {
     "@types/node": "^20",
