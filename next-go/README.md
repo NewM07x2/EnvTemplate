@@ -23,7 +23,8 @@
 - **TypeScript 5** - 型安全な開発
 - **Tailwind CSS** - ユーティリティファースト CSS
 - **Redux Toolkit** - 状態管理
-- **urql** - GraphQL クライアント
+- **urql** - CSR 用 GraphQL クライアント
+- **Prisma** - SSR 用 ORM・データベースクライアント
 
 ### バックエンド (Go)
 
@@ -62,7 +63,8 @@ next-go/
         ├── app/             # Next.js App Router
         ├── components/      # UIコンポーネント
         ├── lib/
-        │   └── graphql/     # GraphQL設定(urql)
+        │   ├── graphql/     # GraphQL設定(urql) - CSR用
+        │   └── prisma/      # Prisma設定 - SSR用
         ├── store/           # Redux store
         └── styles/          # スタイル
 ```
@@ -195,9 +197,11 @@ docker-compose exec postgres psql -U postgres -d nextgo_db
 psql -h localhost -U postgres -d nextgo_db
 ```
 
-## 🔄 GraphQL 使用方法
+## 🔄 データ取得方法
 
-### フロントエンド (Next.js) から GraphQL を使用
+このテンプレートでは、レンダリング方法によってデータ取得方法を使い分けます。
+
+### CSR (Client-Side Rendering) - urql 使用
 
 **urql** を使用して Go Echo の GraphQL エンドポイントにアクセスします。
 
@@ -216,7 +220,7 @@ const USERS_QUERY = `
   query {
     users {
       id
-      name
+      username
       email
     }
   }
@@ -231,14 +235,72 @@ export default function UsersPage() {
   return (
     <div>
       {result.data.users.map((user) => (
-        <div key={user.id}>{user.name}</div>
+        <div key={user.id}>{user.username}</div>
       ))}
     </div>
   )
 }
 ```
 
-### バックエンド (Go) での GraphQL 定義
+### SSR (Server-Side Rendering) - Prisma 使用
+
+**Prisma** を使用して PostgreSQL に直接アクセスします。
+
+#### 設定
+
+- 設定ファイル:
+  - `next/src/lib/prisma/client.ts` - Prisma クライアント
+  - `next/src/lib/prisma/schema.prisma` - DB スキーマ定義
+
+#### 使用例
+
+```typescript
+// 'use client'ディレクティブなし（Server Component）
+import { prisma } from '@/lib/prisma/client'
+
+export default async function UsersPage() {
+  const users = await prisma.user.findMany({
+    include: {
+      posts: true
+    }
+  })
+
+  return (
+    <div>
+      {users.map((user) => (
+        <div key={user.id}>
+          <h2>{user.username}</h2>
+          <p>{user.email}</p>
+          <p>投稿数: {user.posts.length}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+#### データベースマイグレーション
+
+```bash
+# Next.jsコンテナに入る
+docker-compose exec frontend sh
+
+# スキーマをデータベースに適用
+npx prisma db push
+
+# マイグレーションファイルを作成
+npx prisma migrate dev --name migration_name
+
+# Prisma Studioでデータを確認
+npx prisma studio
+```
+
+### 使い分けの基準
+
+- **CSR (urql)**: リアルタイム更新、ユーザーインタラクション後のデータ取得、Go API の既存 GraphQL エンドポイント活用
+- **SSR (Prisma)**: 初期ページロード、SEO 重視、データベース直接アクセスが効率的な場合
+
+### Go Echo (バックエンド) での GraphQL 定義
 
 #### スキーマ定義
 
@@ -247,7 +309,7 @@ export default function UsersPage() {
 ```graphql
 type User {
   id: ID!
-  name: String!
+  username: String!
   email: String!
 }
 
@@ -261,7 +323,7 @@ type Mutation {
 }
 
 input NewUser {
-  name: String!
+  username: String!
   email: String!
 }
 ```
