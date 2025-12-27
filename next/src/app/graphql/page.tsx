@@ -1,31 +1,44 @@
 'use client'
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/store';
+import { useQuery } from 'urql';
 import Link from 'next/link';
-import { PrismaClient } from "@prisma/client";
+
+// サンプルGraphQLクエリ (実際のエンドポイントに合わせて変更してください)
+const SAMPLE_QUERY = `
+  query {
+    # ここにGraphQLクエリを記述
+    # 例: users { id name email }
+  }
+`;
 
 export default function GraphqlPage() {
-  const prisma = new PrismaClient();
+  // urqlを使用したGraphQLクエリの例
+  // const [result] = useQuery({ query: SAMPLE_QUERY });
 
-  const addData = async () => {
-    try {
-      const response = await fetch('/api/addData', {
-        method: 'POST',
-      });
-      const newData = await response.json();
-      console.log('Data added:', newData);
-    } catch (error) {
-      console.error('Error adding data:', error);
-    }
-  };
-
-
-  const count = useSelector((state: RootState) => state.counter.value);
   return (
-    <>
-      <p className="text-4xl api-title">Graphql Page</p>
-      <Link href="/api/get-api" className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded">GetAPI</Link>
-      <button onClick={addData} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Get Data</button>
-    </>
+    <div className="p-8">
+      <h1 className="text-4xl font-bold mb-6">GraphQL サンプルページ (CSR)</h1>
+      <div className="space-y-4">
+        <p className="text-gray-600">
+          このページはクライアントサイドレンダリング(CSR)でGraphQLを使用する例です。
+        </p>
+        <div className="bg-blue-50 p-4 rounded">
+          <h2 className="font-semibold mb-2">urql使用例:</h2>
+          <pre className="bg-gray-800 text-white p-4 rounded overflow-x-auto">
+{`const [result] = useQuery({ query: SAMPLE_QUERY });
+
+if (result.fetching) return <div>Loading...</div>;
+if (result.error) return <div>Error: {result.error.message}</div>;
+
+return <div>{JSON.stringify(result.data)}</div>;`}
+          </pre>
+        </div>
+        <Link 
+          href="/graphql/get-api" 
+          className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          REST API サンプルへ
+        </Link>
+      </div>
+    </div>
   );
 }
