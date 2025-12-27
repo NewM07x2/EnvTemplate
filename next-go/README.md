@@ -151,6 +151,12 @@ docker-compose down -v
 # コンテナに入る
 docker-compose exec api sh
 docker-compose exec frontend sh
+
+# Prismaマイグレーション（Next.jsコンテナ内）
+docker-compose exec frontend sh
+npx prisma db push  # スキーマをDBに反映
+npx prisma migrate dev --name migration_name  # マイグレーション作成
+npx prisma studio  # Prisma Studio起動
 ```
 
 ### ローカル環境で開発する場合
@@ -168,6 +174,21 @@ go run cmd/api/main.go
 
 # ビルド
 go build -o bin/api cmd/api/main.go
+```
+
+#### Next.js (フロントエンド)
+
+```bash
+cd next
+
+# 依存関係のインストール
+npm install
+
+# Prismaクライアント生成
+npx prisma generate
+
+# 開発サーバーの起動
+npm run dev
 ```
 
 #### Next.js (フロントエンド)
@@ -364,7 +385,7 @@ e.GET("/api/users/:id", handlers.GetUser)
 
 ### データベースマイグレーション
 
-#### マイグレーションツールの使用 (golang-migrate)
+#### Go 側 (golang-migrate)
 
 ```bash
 # インストール
@@ -375,6 +396,22 @@ migrate create -ext sql -dir migrations -seq create_users_table
 
 # マイグレーションの実行
 migrate -path migrations -database "postgresql://postgres:postgres@localhost:5432/nextgo_db?sslmode=disable" up
+```
+
+#### Next.js 側 (Prisma)
+
+```bash
+# コンテナ内で実行
+docker-compose exec frontend sh
+
+# スキーマ編集後、DBに反映
+npx prisma db push
+
+# マイグレーション作成
+npx prisma migrate dev --name add_user_table
+
+# マイグレーション本番適用
+npx prisma migrate deploy
 ```
 
 ## 🔧 運用方法
@@ -403,13 +440,18 @@ migrate -path migrations -database "postgresql://postgres:postgres@localhost:543
    module your-project-name
    ```
 
-4. **Docker 起動**
+4. **Prisma スキーマの初期化（必要に応じて）**
+
+   - `next/src/lib/prisma/schema.prisma` を編集してモデルを定義
+   - `docker-compose up` 後に `docker-compose exec frontend npx prisma db push` を実行
+
+5. **Docker 起動**
 
    ```bash
    docker-compose up --build
    ```
 
-5. **開発開始**
+6. **開発開始**
    - フロントエンド: http://localhost:3000
    - API: http://localhost:8080
 
@@ -483,6 +525,7 @@ migrate -path migrations -database "postgresql://postgres:postgres@localhost:543
 
 - [Next.js ドキュメント](https://nextjs.org/docs)
 - [urql ドキュメント](https://formidable.com/open-source/urql/docs/)
+- [Prisma ドキュメント](https://www.prisma.io/docs)
 - [Redux Toolkit ドキュメント](https://redux-toolkit.js.org/)
 - [Tailwind CSS ドキュメント](https://tailwindcss.com/docs)
 
@@ -518,11 +561,37 @@ go mod download
 go build -o bin/api cmd/api/main.go
 ```
 
-### Next.js で urql の接続エラー
+### Next.js で urql の接続エラー (CSR)
 
 - `.env`の`NEXT_PUBLIC_GRAPHQL_ENDPOINT`が正しいか確認
 - Go API コンテナが起動しているか確認: `docker-compose ps`
 - Go の CORS 設定を確認
+
+### Prisma の接続エラー (SSR)
+
+```bash
+# Prismaクライアントを再生成
+docker-compose exec frontend npx prisma generate
+
+# スキーマをDBに適用
+docker-compose exec frontend npx prisma db push
+
+# データベース接続を確認
+docker-compose exec frontend npx prisma studio
+```
+
+### Prisma マイグレーションエラー
+
+```bash
+# マイグレーション状態の確認
+docker-compose exec frontend npx prisma migrate status
+
+# マイグレーションのリセット（開発環境のみ）
+docker-compose exec frontend npx prisma migrate reset
+
+# スキーマを直接適用（開発時）
+docker-compose exec frontend npx prisma db push
+```
 
 ### GraphQL スキーマの変更が反映されない
 
@@ -549,8 +618,9 @@ netstat -ano | findstr :8080
 ### データベース接続エラー
 
 - PostgreSQL コンテナが起動しているか確認
-- 環境変数の設定が正しいか確認
+- 環境変数の設定が正しいか確認 (特に`DATABASE_URL`)
 - ヘルスチェックが完了するまで待つ
+- Next.js 側と Go 側で異なるデータベース URL を使用していないか確認
 
 ---
 
