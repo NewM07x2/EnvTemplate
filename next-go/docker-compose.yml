@@ -53,6 +53,7 @@ services:
     container_name: nextgo-frontend
     environment:
       - NODE_ENV=development
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-nextgo_db}?schema=public
       - NEXT_PUBLIC_API_URL=http://localhost:8080
       - NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:8080/graphql
     ports:
@@ -62,7 +63,8 @@ services:
       - /app/node_modules
       - /app/.next
     depends_on:
-      - api
+      postgres:
+        condition: service_healthy
     networks:
       - app-network
     command: npm run dev
