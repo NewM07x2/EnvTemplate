@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  # PostgreSQLデータベース
+  postgres:
+    image: postgres:16-alpine
+    container_name: react-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-react_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - react-network
+
+  # Reactフロントエンド
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: react-frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_GRAPHQL_ENDPOINT=${VITE_GRAPHQL_ENDPOINT:-http://localhost:8080/graphql}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/react_db?schema=public}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - react-network
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
+
+networks:
+  react-network:
+    driver: bridge
