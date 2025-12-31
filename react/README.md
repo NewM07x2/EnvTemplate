@@ -14,6 +14,7 @@ React + TypeScript + Docker + GraphQL (urql) + Prisma のサンプル環境テ�
 - 🔄 **Redux Toolkit** - 状態管理
 - 🎨 **Vite** - 高速ビルドツール
 - 📱 **React Router** - ルーティング
+- 🧪 **Vitest + React Testing Library** - テスト環境
 
 ## 📦 技術スタック
 
@@ -27,6 +28,13 @@ React + TypeScript + Docker + GraphQL (urql) + Prisma のサンプル環境テ�
 - **Redux Toolkit 2.2** - 状態管理
 - **React Router 7.1** - ルーティング
 - **Axios 1.7** - HTTP クライアント
+
+### テスト
+
+- **Vitest 2.1** - テストフレームワーク
+- **React Testing Library 16.1** - コンポーネントテスト
+- **@testing-library/jest-dom** - カスタムマッチャー
+- **jsdom** - ブラウザ環境シミュレーション
 
 ### データベース
 
@@ -52,11 +60,15 @@ react/
 │   │       └── schema.prisma  # DBスキーマ定義
 │   ├── store/                 # Redux状態管理
 │   ├── pages/                 # ページコンポーネント
+│   ├── test/                  # テスト設定
+│   │   ├── setup.ts           # テストセットアップ
+│   │   └── testing-guide.md   # テストガイド
 │   ├── styles/                # スタイル
 │   ├── App.tsx                # メインアプリ
+│   ├── App.test.tsx           # アプリテスト
 │   └── main.tsx               # エントリーポイント
 ├── index.html                 # HTMLテンプレート
-├── vite.config.ts            # Vite設定
+├── vite.config.ts            # Vite設定（Vitest含む）
 ├── docker-compose.yml        # Docker Compose設定
 └── package.json              # 依存関係
 ```
@@ -382,11 +394,12 @@ npm install react-icons
 このテンプレートには、**Vitest + React Testing Library**を使用したテスト環境が含まれています。
 
 ### テストツール
+
 - **Vitest 2.1** - 高速テストフレームワーク
-- **React Testing Library 16.1** - Reactコンポーネントテスト
+- **React Testing Library 16.1** - React コンポーネントテスト
 - **@testing-library/jest-dom** - カスタムマッチャー
 - **jsdom** - ブラウザ環境シミュレーション
-- **Vitest UI** - テスト結果のUI表示
+- **Vitest UI** - テスト結果の UI 表示
 - **Coverage** - カバレッジレポート生成
 
 ### テストコマンド
@@ -405,7 +418,7 @@ npm run test:ui
 npm run test:coverage
 ```
 
-### Dockerコンテナ内でテスト実行
+### Docker コンテナ内でテスト実行
 
 ```bash
 # コンテナに入る
@@ -424,10 +437,10 @@ npm run test:coverage
 
 - `src/App.test.tsx` - アプリケーションのテスト
 - `src/pages/HomePage.test.tsx` - ホームページのテスト
-- `src/pages/GraphQLPage.test.tsx` - GraphQLページのテスト
-- `src/pages/PrismaPage.test.tsx` - Prismaページのテスト
-- `src/store/slices/counterSlice.test.ts` - Redux sliceのテスト
-- `src/lib/graphql/urqlClient.test.ts` - urqlクライアントのテスト
+- `src/pages/GraphQLPage.test.tsx` - GraphQL ページのテスト
+- `src/pages/PrismaPage.test.tsx` - Prisma ページのテスト
+- `src/store/slices/counterSlice.test.ts` - Redux slice のテスト
+- `src/lib/graphql/urqlClient.test.ts` - urql クライアントのテスト
 
 ### テストの書き方
 
