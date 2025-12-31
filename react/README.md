@@ -377,14 +377,75 @@ npm install date-fns
 npm install react-icons
 ```
 
-## 🧪 テスト（追加可能）
+## 🧪 テスト
+
+このテンプレートには、**Vitest + React Testing Library**を使用したテスト環境が含まれています。
+
+### テストツール
+- **Vitest 2.1** - 高速テストフレームワーク
+- **React Testing Library 16.1** - Reactコンポーネントテスト
+- **@testing-library/jest-dom** - カスタムマッチャー
+- **jsdom** - ブラウザ環境シミュレーション
+- **Vitest UI** - テスト結果のUI表示
+- **Coverage** - カバレッジレポート生成
+
+### テストコマンド
 
 ```bash
-# Vitestをインストール
-npm install -D vitest @testing-library/react @testing-library/jest-dom
+# すべてのテストを実行
+npm run test
+
+# ウォッチモードで実行
+npm run test -- --watch
+
+# UIモードで実行（ブラウザでテスト結果表示）
+npm run test:ui
+
+# カバレッジレポートを生成
+npm run test:coverage
+```
+
+### Dockerコンテナ内でテスト実行
+
+```bash
+# コンテナに入る
+docker-compose exec frontend sh
 
 # テスト実行
 npm run test
+
+# カバレッジ生成
+npm run test:coverage
+```
+
+### テストファイルの例
+
+プロジェクトには以下のサンプルテストが含まれています:
+
+- `src/App.test.tsx` - アプリケーションのテスト
+- `src/pages/HomePage.test.tsx` - ホームページのテスト
+- `src/pages/GraphQLPage.test.tsx` - GraphQLページのテスト
+- `src/pages/PrismaPage.test.tsx` - Prismaページのテスト
+- `src/store/slices/counterSlice.test.ts` - Redux sliceのテスト
+- `src/lib/graphql/urqlClient.test.ts` - urqlクライアントのテスト
+
+### テストの書き方
+
+詳細なテストガイドは `src/test/testing-guide.md` を参照してください。
+
+基本的なテスト例:
+
+```typescript
+import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import MyComponent from './MyComponent'
+
+describe('MyComponent', () => {
+  it('正しくレンダリングされる', () => {
+    render(<MyComponent />)
+    expect(screen.getByText('Hello')).toBeInTheDocument()
+  })
+})
 ```
 
 ## 📝 よくある質問
