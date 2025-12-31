@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="ブログ - Astro テンプレート">
+  <main class="min-h-screen bg-gray-50">
+    <div class="container mx-auto px-4 py-12">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">📝 ブログ</h1>
+        
+        <p class="text-gray-600 mb-8">
+          MDXファイルを追加してブログ記事を作成できます。
+        </p>
+
+        <div class="grid gap-6">
+          <!-- サンプル記事カード -->
+          <article class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+              <a href="/blog/sample-post" class="hover:text-blue-600">
+                Astroで始める静的サイト生成
+              </a>
+            </h2>
+            <p class="text-gray-500 text-sm mb-4">2026年1月1日</p>
+            <p class="text-gray-600">
+              Astroを使用した静的サイト生成の基本について学びます。
+              アイランドアーキテクチャの利点や、複数フレームワークの統合方法を解説します。
+            </p>
+          </article>
+
+          <article class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+              <a href="/blog/mdx-guide" class="hover:text-blue-600">
+                MDXの使い方ガイド
+              </a>
+            </h2>
+            <p class="text-gray-500 text-sm mb-4">2026年1月1日</p>
+            <p class="text-gray-600">
+              マークダウンにコンポーネントを埋め込む方法を学びます。
+              インタラクティブなドキュメントやブログを作成できます。
+            </p>
+          </article>
+        </div>
+
+        <div class="mt-8 text-center">
+          <a href="/" class="text-blue-600 hover:underline">← ホームに戻る</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

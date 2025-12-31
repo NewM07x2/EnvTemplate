@@ -1,0 +1,139 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Counter from '../components/Counter';
+---
+
+<Layout title="Astro テンプレート - ホーム">
+  <main class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <!-- ヘッダー -->
+    <header class="bg-white shadow-sm">
+      <nav class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <h1 class="text-2xl font-bold text-blue-600">Astro Template</h1>
+          <div class="flex gap-4">
+            <a href="/" class="text-gray-600 hover:text-blue-600">ホーム</a>
+            <a href="/blog" class="text-gray-600 hover:text-blue-600">ブログ</a>
+            <a href="/about" class="text-gray-600 hover:text-blue-600">About</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <div class="container mx-auto px-4 py-12">
+      <div class="max-w-4xl mx-auto">
+        <!-- ヒーローセクション -->
+        <section class="text-center mb-16">
+          <h2 class="text-5xl font-bold text-gray-900 mb-4">
+            Welcome to <span class="text-blue-600">Astro</span>
+          </h2>
+          <p class="text-xl text-gray-600 mb-8">
+            静的サイト生成のための高速フレームワーク
+          </p>
+          <div class="flex gap-4 justify-center">
+            <a
+              href="https://docs.astro.build"
+              target="_blank"
+              class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+            >
+              ドキュメント
+            </a>
+            <a
+              href="https://github.com/withastro/astro"
+              target="_blank"
+              class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition"
+            >
+              GitHub
+            </a>
+          </div>
+        </section>
+
+        <!-- 技術スタック -->
+        <section class="mb-16">
+          <h3 class="text-3xl font-bold text-gray-900 mb-6">🛠️ 技術スタック</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl font-semibold text-blue-600 mb-2">Astro 4.x</h4>
+              <p class="text-gray-600">高速な静的サイト生成フレームワーク</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl font-semibold text-blue-600 mb-2">React 18</h4>
+              <p class="text-gray-600">インタラクティブなコンポーネント</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl font-semibold text-blue-600 mb-2">Tailwind CSS</h4>
+              <p class="text-gray-600">ユーティリティファーストCSS</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl font-semibold text-blue-600 mb-2">TypeScript</h4>
+              <p class="text-gray-600">型安全な開発</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl font-semibold text-blue-600 mb-2">Prisma</h4>
+              <p class="text-gray-600">モダンなORM</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl font-semibold text-blue-600 mb-2">Vitest</h4>
+              <p class="text-gray-600">高速テストフレームワーク</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reactコンポーネントの例 -->
+        <section class="mb-16">
+          <h3 class="text-3xl font-bold text-gray-900 mb-6">🎯 インタラクティブコンポーネント</h3>
+          <div class="bg-white p-8 rounded-lg shadow-md">
+            <p class="text-gray-600 mb-4">
+              Astroでは、必要な部分だけReactを使用できます（アイランドアーキテクチャ）
+            </p>
+            <Counter client:load />
+          </div>
+        </section>
+
+        <!-- 特徴 -->
+        <section>
+          <h3 class="text-3xl font-bold text-gray-900 mb-6">✨ 特徴</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <span class="text-blue-600 mr-2">•</span>
+              <div>
+                <strong>ゼロJavaScript:</strong> デフォルトでJavaScriptを配信しない
+              </div>
+            </li>
+            <li class="flex items-start">
+              <span class="text-blue-600 mr-2">•</span>
+              <div>
+                <strong>アイランドアーキテクチャ:</strong> 必要な部分だけインタラクティブに
+              </div>
+            </li>
+            <li class="flex items-start">
+              <span class="text-blue-600 mr-2">•</span>
+              <div>
+                <strong>複数フレームワーク対応:</strong> React、Vue、Svelteを混在可能
+              </div>
+            </li>
+            <li class="flex items-start">
+              <span class="text-blue-600 mr-2">•</span>
+              <div>
+                <strong>高速ビルド:</strong> Viteベースの高速な開発体験
+              </div>
+            </li>
+            <li class="flex items-start">
+              <span class="text-blue-600 mr-2">•</span>
+              <div>
+                <strong>MDXサポート:</strong> マークダウンにコンポーネントを埋め込み可能
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="bg-gray-900 text-white py-8 mt-16">
+      <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2026 Astro Template. All rights reserved.</p>
+      </div>
+    </footer>
+  </main>
+</Layout>
