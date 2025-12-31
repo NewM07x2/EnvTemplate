@@ -1,0 +1,33 @@
+name = "hono-cloudflare-workers"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+# Workers環境変数
+[vars]
+ENVIRONMENT = "development"
+
+# KV Namespace (オプション)
+# [[kv_namespaces]]
+# binding = "MY_KV"
+# id = "your-kv-namespace-id"
+
+# D1 Database (オプション)
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "my-database"
+# database_id = "your-database-id"
+
+# R2 Bucket (オプション)
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+# Durable Objects (オプション)
+# [[durable_objects.bindings]]
+# name = "MY_DURABLE_OBJECT"
+# class_name = "MyDurableObject"
+
+# Queue (オプション)
+# [[queues.producers]]
+# binding = "MY_QUEUE"
+# queue = "my-queue"
