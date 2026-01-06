@@ -1,0 +1,91 @@
+version: "3.8"
+
+services:
+  # Supabase PostgreSQL
+  postgres:
+    image: supabase/postgres:15.1.0.147
+    container_name: next_fastapi_supabase_db
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_HOST: /var/run/postgresql
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+  # Supabase Studio (Database UI)
+  studio:
+    image: supabase/studio:20231123-64695c4
+    container_name: supabase_studio
+    ports:
+      - "${STUDIO_PORT:-3010}:3000"
+    environment:
+      SUPABASE_URL: http://kong:8000
+      STUDIO_PG_META_URL: http://meta:8080
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+    depends_on:
+      - postgres
+    networks:
+      - app_network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fastapi_backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/postgres}
+      - SUPABASE_URL=${SUPABASE_URL:-http://postgres:5432}
+      - SUPABASE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - SUPABASE_JWT_SECRET=${SUPABASE_JWT_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - app_network
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nextjs_frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-http://localhost:5432}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    depends_on:
+      - backend
+    command: npm run dev
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge

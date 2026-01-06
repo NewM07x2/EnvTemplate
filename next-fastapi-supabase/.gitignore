@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Next.js
+.next/
+out/
+
+# FastAPI
+.venv/
+venv/
+env/
+
+# environment variables
+.env
+.env.local
+.env.*.local
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# testing
+coverage/
+.pytest_cache/
+
+# docker volumes
+postgres_data/
+supabase/
