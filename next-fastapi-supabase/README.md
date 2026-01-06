@@ -1,13 +1,13 @@
 # Next.js + FastAPI + Supabase Template
 
-Next.js + FastAPI + Supabase (PostgreSQL) + Dockerによるフルスタックアプリケーション開発テンプレートです。
+Next.js + FastAPI + Supabase (PostgreSQL) + Docker によるフルスタックアプリケーション開発テンプレートです。
 
 ## ✨ 主な機能
 
 - **Next.js 15** - App Router、Server Components、React 19
-- **FastAPI** - 高速なPython Webフレームワーク
+- **FastAPI** - 高速な Python Web フレームワーク
 - **Supabase PostgreSQL** - スケーラブルなデータベース
-- **JWT認証** - セキュアなトークンベース認証
+- **JWT 認証** - セキュアなトークンベース認証
 - **Docker Compose** - 完全なコンテナ化環境
 - **TypeScript** - 型安全な開発環境
 
@@ -19,7 +19,7 @@ Next.js + FastAPI + Supabase (PostgreSQL) + Dockerによるフルスタックア
 - Node.js 22+（ローカル開発の場合）
 - Python 3.12+（ローカル開発の場合）
 
-### Dockerで起動
+### Docker で起動
 
 ```bash
 # 環境変数の設定
@@ -38,7 +38,7 @@ docker-compose logs -f
 docker-compose down
 ```
 
-### アクセスURL
+### アクセス URL
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
@@ -154,6 +154,7 @@ curl -X POST http://localhost:8000/api/auth/login \
 ```
 
 レスポンス:
+
 ```json
 {
   "access_token": "eyJ...",
@@ -197,7 +198,8 @@ curl -X GET http://localhost:8000/api/users \
 
 ### API ドキュメント
 
-FastAPIが自動生成するドキュメント:
+FastAPI が自動生成するドキュメント:
+
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
@@ -219,7 +221,7 @@ docker-compose exec postgres psql -U postgres -d postgres
 
 ### Supabase Studio
 
-データベースUIでデータを視覚的に管理:
+データベース UI でデータを視覚的に管理:
 http://localhost:3010
 
 ### データベース接続
@@ -269,41 +271,41 @@ npm test -- --watch
 
 ## 🎨 フロントエンド
 
-### Supabaseクライアント
+### Supabase クライアント
 
 ```typescript
 // src/lib/supabase.ts
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js'
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+)
 ```
 
-### API通信
+### API 通信
 
 ```typescript
 // src/lib/api.ts
-import axios from 'axios';
+import axios from 'axios'
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
+  baseURL: process.env.NEXT_PUBLIC_API_URL
+})
 
 // 自動トークン付与
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('access_token')
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`
   }
-  return config;
-});
+  return config
+})
 ```
 
 ### Tailwind CSS
 
-Supabaseカラーをカスタマイズ:
+Supabase カラーをカスタマイズ:
 
 ```javascript
 // tailwind.config.js
@@ -312,19 +314,19 @@ module.exports = {
     extend: {
       colors: {
         'supabase-green': '#3ECF8E',
-        'supabase-dark': '#1E1E1E',
-      },
-    },
-  },
-};
+        'supabase-dark': '#1E1E1E'
+      }
+    }
+  }
+}
 ```
 
-## 🐳 Docker環境
+## 🐳 Docker 環境
 
 ### サービス構成
 
 - **postgres** - Supabase PostgreSQL 15
-- **studio** - Supabase Studio（データベースUI）
+- **studio** - Supabase Studio（データベース UI）
 - **backend** - FastAPI (Python 3.12)
 - **frontend** - Next.js (Node.js 22)
 
@@ -383,6 +385,7 @@ vercel
 ```
 
 環境変数を設定:
+
 - `NEXT_PUBLIC_API_URL`
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
@@ -420,15 +423,15 @@ fly deploy
 
 ## 📚 参考リンク
 
-- [Next.js公式ドキュメント](https://nextjs.org/)
-- [FastAPI公式ドキュメント](https://fastapi.tiangolo.com/)
-- [Supabase公式ドキュメント](https://supabase.com/docs)
-- [Docker公式ドキュメント](https://docs.docker.com/)
-- [Tailwind CSS公式ドキュメント](https://tailwindcss.com/)
+- [Next.js 公式ドキュメント](https://nextjs.org/)
+- [FastAPI 公式ドキュメント](https://fastapi.tiangolo.com/)
+- [Supabase 公式ドキュメント](https://supabase.com/docs)
+- [Docker 公式ドキュメント](https://docs.docker.com/)
+- [Tailwind CSS 公式ドキュメント](https://tailwindcss.com/)
 
 ## 🤝 コントリビューション
 
-このテンプレートはMITライセンスのもとで公開されています。自由にカスタマイズしてご利用ください。
+このテンプレートは MIT ライセンスのもとで公開されています。自由にカスタマイズしてご利用ください。
 
 ## 📝 ライセンス
 
