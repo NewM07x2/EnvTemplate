@@ -5,10 +5,12 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: nextpy-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-nextpy_db}
+      POSTGRES_INITDB_ARGS: "-c max_connections=200"
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
@@ -18,56 +20,84 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 20s
     networks:
       - app-network
 
   # FastAPI バックエンド
   api:
     build:
-      context: ./FastAPI
-      dockerfile: ./docker/Dockerfile
+      context: ..
+      dockerfile: ./docker/Dockerfile-api
     container_name: app-api
+    restart: unless-stopped
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-nextpy_db}
-      - APP_ENV=development
-      - DEBUG=True
-      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-nextpy_db}
+      APP_ENV: ${APP_ENV:-development}
+      DEBUG: "${DEBUG:-True}"
+      ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:8000,http://api:8000"
+      PYTHONUNBUFFERED: "1"
     ports:
       - "${API_PORT:-8000}:8000"
     volumes:
-      - ./FastAPI:/app
+      - ../FastAPI:/app
       - /app/__pycache__
+      - /app/.pytest_cache
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     command: >
       sh -c "
-        prisma db push &&
+        cd /app &&
+        prisma db push --skip-generate &&
         uvicorn main:app --host 0.0.0.0 --port 8000 --reload
       "
 
   # Next.js フロントエンド
   frontend:
     build:
-      context: ./next
-      dockerfile: ./docker/Dockerfile
+      context: ..
+      dockerfile: ./docker/Dockerfile-web
     container_name: app-web
+    restart: unless-stopped
     environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
-      - NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:8000/graphql
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_GRAPHQL_ENDPOINT: http://localhost:8000/graphql
+      NEXT_PUBLIC_APP_ENV: ${APP_ENV:-development}
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     volumes:
-      - ./next:/app
+      - ../next:/app
       - /app/node_modules
       - /app/.next
     depends_on:
-      - api
+      api:
+        condition: service_started
     networks:
       - app-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     command: npm run dev
 
 volumes:

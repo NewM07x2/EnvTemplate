@@ -5,11 +5,13 @@ FROM python:3.12-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PATH=/root/.local/bin:$PATH
 
 # システム依存関係をインストール
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
+    curl \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
@@ -17,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # requirements.txt をコピー
-COPY requirements.txt .
+COPY FastAPI/requirements.txt .
 
 # Python 依存関係をインストール
 RUN pip install --no-cache-dir -r requirements.txt
@@ -27,26 +29,31 @@ FROM python:3.12-slim AS final
 
 # 環境変数を設定
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PATH=/root/.local/bin:$PATH
 
 # 作業ディレクトリを設定
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libatomic1 \
+    curl \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # ベースステージから依存関係をコピー
 COPY --from=base /usr/local/lib/python3.12 /usr/local/lib/python3.12
 COPY --from=base /usr/local/bin /usr/local/bin
-COPY --from=base /app /app
+COPY --from=base /app/requirements.txt .
 
 # アプリケーションコードをコピー
-COPY . .
+COPY FastAPI/ .
 
-# Prisma クライアントを生成
-RUN prisma generate
+# Prisma クライアントを生成（存在する場合）
+RUN if [ -f "prisma/schema.prisma" ]; then prisma generate; fi
+
+# ヘルスチェック
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/api/health || exit 1
 
 # ポートを公開
 EXPOSE 8000
