@@ -370,15 +370,84 @@ class Query:
 
 ## 🧪 テスト
 
+このテンプレートには、pytest を使った完全なテスト環境が整備されています。
+詳細は [tests/README.md](tests/README.md) を参照してください。
+
+### テストの実行
+
 ```bash
 # すべてのテストを実行
 pytest
 
-# カバレッジ付きで実行
-pytest --cov=app
+# 詳細出力付きで実行
+pytest -v
 
-# 特定のテストのみ実行
-pytest tests/test_health.py
+# カバレッジ付きで実行
+pytest --cov=app --cov-report=html
+
+# 特定のテストファイルを実行
+pytest tests/test_services_example.py
+
+# 特定のテストクラスを実行
+pytest tests/test_api_routes_example.py::TestUserAPI -v
+
+# ウォッチモード（ファイル変更時に自動実行）
+pytest-watch
+```
+
+### テスト構成
+
+- **tests/conftest.py** - 共有フィクスチャ（API クライアント、モック、認証など）
+- **tests/test_services_example.py** - ユニットテストテンプレート
+- **tests/test_api_routes_example.py** - REST API テストテンプレート
+- **tests/test_graphql_example.py** - GraphQL テストテンプレート
+- **pytest.ini** - pytest 設定（asyncio、カバレッジ設定など）
+
+### テスト環境セットアップ
+
+テスト環境は自動セットアップされます：
+
+```python
+# 認証ヘッダー
+@pytest.fixture
+def auth_headers():
+    """認証付きでエンドポイントをテスト"""
+    return {"Authorization": "Bearer test-token-12345"}
+
+# モックされた Prisma クライアント
+@pytest.fixture
+def mock_prisma_client():
+    """データベース操作をモック"""
+    pass
+
+# GraphQL ヘルパー
+@pytest.fixture
+def graphql_query():
+    """GraphQL クエリのテスト"""
+    pass
+```
+
+### 利用可能なテスト例
+
+```python
+# REST API テスト
+def test_get_users(client):
+    response = client.get("/api/users")
+    assert response.status_code == 200
+
+# 非同期テスト
+@pytest.mark.asyncio
+async def test_async_service(mock_prisma_client):
+    from app.services.user_service import UserService
+    service = UserService(db=mock_prisma_client)
+    result = await service.get_user(1)
+    assert result is not None
+
+# GraphQL テスト
+def test_graphql_query(client, graphql_query):
+    query = graphql_query("query { users { id email } }")
+    response = client.post("/graphql", json=query)
+    assert response.status_code == 200
 ```
 
 ## 📋 コードフォーマット・Lint
