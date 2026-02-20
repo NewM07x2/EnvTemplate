@@ -1,6 +1,7 @@
 {
-  "name": "sample",
-  "version": "0.1.0",
+  "name": "next-app-template",
+  "version": "1.0.0",
+  "description": "Next.js + GraphQL + Prisma テンプレート",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,9 +10,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.8.0",
     "@reduxjs/toolkit": "^2.2.7",
-    "@storybook/react": "^8.2.9",
-    "@storybook/test": "^8.2.9",
     "@urql/next": "^1.1.1",
     "graphql": "^16.8.1",
     "next": "14.1.0",
@@ -28,6 +28,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8.4.47",
+    "prisma": "^5.8.0",
     "tailwindcss": "^3.4.13",
     "typescript": "^5"
   }
