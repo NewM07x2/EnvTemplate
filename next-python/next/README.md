@@ -1,102 +1,157 @@
-# Next.js プロジェクト
+# Next.js + GraphQL + Prisma テンプレート
 
-このプロジェクトは、[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)を使用して作成された[Next.js](https://nextjs.org/)プロジェクトです。
+GraphQLとPrismaをSSRで利用するNext.jsアプリケーション用のテンプレートです。このテンプレートをコピーしてすぐに開発を始められます。
 
-## プロジェクト概要
+## 特徴
 
-このプロジェクトは、Next.js を使用してモダンな Web アプリケーションを構築するためのテンプレートです。API ルート、動的ルーティング、Tailwind CSS との統合など、さまざまな機能の例が含まれています。
+- ✨ **Next.js 14.1.0** - 最新のServer Componentsサポート
+- 🔗 **GraphQL** - urql/Next によるSSR対応のAPI通信
+- 🗄️ **Prisma** - 型安全なORM
+- 🎨 **Tailwind CSS** - ユーティリティファーストなCSS
+- 📦 **Redux Toolkit** - 状態管理
+- 🔍 **TypeScript** - 完全なType Safety
 
 ## ディレクトリ構成
 
 ```plaintext
-next/
-├── .storybook/         # Storybook の設定ファイル
-├── public/             # 静的アセット（画像、フォントなど）
-├── src/                # ソースコード
-│   ├── app/            # Next.js のアプリディレクトリ（ページ、レイアウトなど）
-│   ├── components/     # 再利用可能な UI コンポーネント
-│   ├── const/          # アプリ全体で使用される定数
-│   ├── hooks/          # カスタム React フック
-│   ├── lib/            # ユーティリティ関数やライブラリ
-│   ├── store/          # Redux ストアとスライス
-│   ├── styles/         # グローバル CSS と Tailwind の設定
-│   └── module/         # 特定の機能やモジュール
-├── docker/             # Docker 関連の設定ファイル
-│   ├── Dockerfile      # Next.js アプリケーション用の Dockerfile
-│   └── docker-compose.yml # Docker Compose 設定ファイル
-└── ...
+src/
+├── app/                # Next.js App Router
+│   ├── api/           # API ルート
+│   ├── layout.tsx     # ルートレイアウト
+│   ├── page.tsx       # ホームページ
+│   ├── error.tsx      # エラーページ
+│   └── not-found.tsx  # 404 ページ
+├── components/        # React コンポーネント
+│   ├── base/         # レイアウト、ヘッダーなど
+│   └── elements/     # ボタン、入力フィールドなど
+├── const/            # 定数定義
+├── hooks/            # カスタム React フック
+├── lib/              # ユーティリティとライブラリ
+│   ├── graphql/      # GraphQL クライアント設定
+│   └── prisma/       # Prisma スキーマ
+├── store/            # Redux ストア
+│   └── slices/       # Redux スライス
+├── styles/           # グローバル CSS
+└── providers.tsx     # アプリプロバイダー
 ```
 
-## はじめに
+## セットアップ手順
 
-### 必要条件
-
-以下がインストールされていることを確認してください：
-
-- Node.js (v16 以上)
-- npm, yarn, pnpm, または bun（いずれかのパッケージマネージャー）
-
-### インストール
-
-依存関係をインストールします：
+### 1. 依存パッケージをインストール
 
 ```bash
 npm install
-# または
-yarn install
-# または
-pnpm install
-# または
-bun install
 ```
 
-### 開発サーバーの起動
+### 2. 環境変数を設定
 
-開発サーバーを起動します：
+`.env.local` を作成して環境変数を設定します：
+
+```env
+# データベース
+DATABASE_URL="your-database-url"
+
+# GraphQL
+GRAPHQL_ENDPOINT="your-graphql-endpoint"
+```
+
+### 3. Prisma をセットアップ
+
+```bash
+# Prisma を初期化
+npx prisma init
+
+# スキーマを設定後、マイグレーションを実行
+npx prisma migrate dev --name init
+
+# Prisma クライアントを生成
+npx prisma generate
+```
+
+### 4. 開発サーバーを起動
 
 ```bash
 npm run dev
-# または
-yarn dev
-# または
-pnpm dev
-# または
-bun dev
 ```
 
-ブラウザで [http://localhost:3000](http://localhost:3000) を開き、結果を確認してください。
+[http://localhost:3000](http://localhost:3000) にアクセスしてアプリが起動しているか確認してください。
 
-### 本番ビルド
-
-本番用にアプリケーションをビルドします：
+## 利用可能なコマンド
 
 ```bash
+# 開発サーバー起動
+npm run dev
+
+# 本番ビルド
 npm run build
-# または
-yarn build
-# または
-pnpm build
-# または
-bun build
+
+# 本番サーバー起動
+npm start
+
+# Lint チェック
+npm run lint
 ```
 
-### 本番サーバーの起動
+## 主要な設定ファイル
 
-ビルド後、本番サーバーを起動します：
+- **`next.config.mjs`** - Next.js の設定
+- **`tsconfig.json`** - TypeScript の設定
+- **`tailwind.config.ts`** - Tailwind CSS の設定
+- **`.eslintrc.json`** - ESLint の設定
+- **`postcss.config.js`** - PostCSS の設定
+
+## Prisma の使用例
+
+### スキーマ定義
+
+`src/lib/prisma/schema.prisma`:
+
+```prisma
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+```
+
+### データ操作
+
+```typescript
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+// ユーザーを作成
+const user = await prisma.user.create({
+  data: {
+    email: 'user@example.com',
+    name: 'John Doe',
+  },
+});
+
+// ユーザーを取得
+const users = await prisma.user.findMany();
+```
+
+## GraphQL の使用例
+
+`src/lib/graphql/urqlClient.ts` を参照して urql クライアントを設定し、GraphQL クエリを実行します。
+
+## Docker での起動
 
 ```bash
-npm run start
-# または
-yarn start
-# または
-pnpm start
-# または
-bun start
+docker-compose -f docker/docker-compose.yml up
 ```
 
-## Docker を使用した起動方法
+## 注意事項
 
-このプロジェクトは Docker を使用して起動することも可能です。以下の手順に従ってください。
+- このテンプレートはSSRを前提としています
+- Prisma のマイグレーションを実行する前に、スキーマを適切に設定してください
+- GraphQL エンドポイントの設定を忘れずに行ってください
+
+## ライセンス
+
+MIT
 
 ### 必要な環境
 
