@@ -1,10 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// npx prisma migrate dev --name init
+// Prisma schema file
+// https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -15,12 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User model
-model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
-  name       String?
-  age        Int
-  createDate DateTime @default(now())
-  deleted    Boolean  @default(false)
-}
+// TODO: ここにモデルを定義してください
+// 例:
+// model User {
+//   id    Int     @id @default(autoincrement())
+//   email String  @unique
+//   name  String?
+// }
