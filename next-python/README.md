@@ -1,7 +1,7 @@
-# Next.js + FastAPI テンプレート環境
+# Next.js + GraphQL + Prisma テンプレート環境
 
-このフォルダは、**Next.js (フロントエンド)** + **FastAPI (バックエンド API)** + **PostgreSQL** + **Docker** を使用したフルスタックアプリケーションのテンプレート環境です。
-このフォルダをコピーして新しいプロジェクトを開始できます。
+このフォルダは、**Next.js 14.1.0** でGraphQLとPrismaをSSRで利用するフルスタックWebアプリケーション開発用のテンプレート環境です。
+このフォルダをコピーして新しいプロジェクトをすぐに開始できます。
 
 ## 📋 目次
 
@@ -10,7 +10,8 @@
 - [セットアップ方法](#セットアップ方法)
 - [開発方法](#開発方法)
 - [GraphQL 使用方法](#graphql使用方法)
-- [API 開発](#api開発)
+- [Prisma の使用方法](#prismaの使用方法)
+- [データベース操作](#データベース操作)
 - [運用方法](#運用方法)
 - [注意点](#注意点)
 
@@ -23,55 +24,48 @@
 - **TypeScript 5** - 型安全な開発
 - **Tailwind CSS** - ユーティリティファースト CSS
 - **Redux Toolkit** - 状態管理
-- **urql** - GraphQL クライアント
-
-### バックエンド (FastAPI)
-
-- **FastAPI 0.115.0** - 高性能 Python ウェブフレームワーク
-- **Strawberry GraphQL** - Python 用 GraphQL ライブラリ
-- **Prisma (Python)** - データベース ORM
-- **Pydantic** - データバリデーション
-- **Uvicorn** - ASGI サーバー
+- **urql** - GraphQL クライアント (SSR対応)
+- **@prisma/client** - Prismaクライアント
 
 ### インフラ
 
 - **Docker & Docker Compose** - コンテナ化
-- **PostgreSQL 16** - データベース
+- **PostgreSQL** - データベース（オプション）
 
 ## 📁 プロジェクト構成
 
 ```
-next-python/
-├── docker-compose.yml          # 統合Docker Compose設定
+next/
 ├── .env.example               # 環境変数のサンプル
-├── FastAPI/                   # バックエンドAPI
-│   ├── main.py               # FastAPIエントリーポイント
-│   ├── Dockerfile            # FastAPI用Dockerfile
-│   ├── requirements.txt      # Python依存関係
-│   ├── .env.example         # FastAPI環境変数サンプル
-│   ├── prisma/
-│   │   └── schema.prisma    # データベーススキーマ
-│   └── app/
-│       ├── api/             # REST APIエンドポイント
-│       ├── core/            # 設定・DB接続
-│       ├── graphql/         # GraphQLスキーマ・リゾルバ
-│       ├── models/          # データモデル
-│       ├── repositories/    # データアクセス層
-│       ├── services/        # ビジネスロジック
-│       ├── schemas/         # Pydanticスキーマ
-│       └── middleware/      # ミドルウェア
-└── next/                     # フロントエンド
-    ├── docker/
-    │   └── Dockerfile       # Next.js用Dockerfile
-    ├── .env.example         # Next.js環境変数サンプル
-    ├── package.json         # Node.js依存関係
-    └── src/
-        ├── app/             # Next.js App Router
-        ├── components/      # UIコンポーネント
-        ├── lib/
-        │   └── graphql/     # GraphQL設定(urql)
-        ├── store/           # Redux store
-        └── styles/          # スタイル
+├── docker/
+│   └── Dockerfile            # Next.js用Dockerfile
+├── public/                   # 静的アセット（画像、フォントなど）
+├── src/
+│   ├── app/                  # Next.js App Router
+│   │   ├── api/             # API ルート
+│   │   ├── graphql/         # GraphQL ページ
+│   │   ├── layout.tsx       # ルートレイアウト
+│   │   ├── page.tsx         # ホームページ
+│   │   ├── error.tsx        # エラーページ
+│   │   ├── not-found.tsx    # 404 ページ
+│   │   └── providers.tsx    # アプリプロバイダー
+│   ├── components/          # React コンポーネント
+│   │   ├── base/           # レイアウト、ヘッダーなど
+│   │   └── elements/       # ボタン、入力フィールドなど
+│   ├── const/              # 定数定義
+│   ├── hooks/              # カスタム React フック
+│   ├── lib/                # ユーティリティとライブラリ
+│   │   ├── graphql/        # GraphQL クライアント設定 (urql)
+│   │   └── prisma/         # Prisma スキーマ
+│   ├── store/              # Redux ストア
+│   │   └── slices/         # Redux スライス
+│   └── styles/             # グローバル CSS
+├── package.json            # Node.js 依存関係
+├── tsconfig.json           # TypeScript 設定
+├── next.config.mjs         # Next.js 設定
+├── tailwind.config.ts      # Tailwind CSS 設定
+├── postcss.config.js       # PostCSS 設定
+└── .eslintrc.json          # ESLint 設定
 ```
 
 ## 🚀 セットアップ方法
@@ -81,147 +75,114 @@ next-python/
 新しいプロジェクトを作成する際は、このフォルダ全体をコピーします:
 
 ```bash
-# Windowsの場合
-cp -r next-python my-new-project
+# フォルダのコピー
+cp -r next my-new-project
 cd my-new-project
 ```
 
 ### 2. 環境変数の設定
 
-#### ルートの環境変数
-
-`.env.example`をコピーして`.env`を作成:
+`.env.example` をコピーして `.env.local` を作成:
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
 
-#### FastAPI の環境変数
+`.env.local` の内容を編集します:
+
+```env
+# データベース (PostgreSQL)
+DATABASE_URL="postgresql://user:password@localhost:5432/nextapp"
+
+# GraphQL エンドポイント (バックエンドがある場合)
+NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:8000/graphql
+
+# API URL
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# 環境
+NODE_ENV=development
+```
+
+### 3. 依存パッケージをインストール
 
 ```bash
-cd FastAPI
-cp .env.example .env
-cd ..
+npm install
 ```
 
-#### Next.js の環境変数
+### 4. Prisma をセットアップ
 
 ```bash
-cd next
-cp .env.example .env
-cd ..
+# Prisma を初期化 (初回のみ)
+npx prisma init
+
+# データベーススキーマを定義後、マイグレーションを実行
+npx prisma migrate dev --name init
+
+# Prisma クライアントを生成
+npx prisma generate
 ```
 
-### 3. Docker コンテナの起動
-
-プロジェクトルートで実行:
+### 5. 開発サーバーを起動
 
 ```bash
-# コンテナのビルドと起動
-docker-compose up --build
-
-# バックグラウンドで起動
-docker-compose up -d
+npm run dev
 ```
 
-### 4. アクセス確認
-
-- **フロントエンド**: http://localhost:3000
-- **FastAPI ドキュメント**: http://localhost:8000/docs
-- **GraphQL Playground**: http://localhost:8000/graphql
-- **PostgreSQL**: localhost:5432
+[http://localhost:3000](http://localhost:3000) にアクセスしてアプリが起動しているか確認してください。
 
 ## 💻 開発方法
 
-### Docker を使用する場合（推奨）
-
-```bash
-# 全サービスの起動
-docker-compose up
-
-# 特定のサービスのみ起動
-docker-compose up frontend
-docker-compose up api
-
-# ログの確認
-docker-compose logs -f api
-docker-compose logs -f frontend
-
-# コンテナの停止
-docker-compose down
-
-# ボリュームも削除して完全にクリーンアップ
-docker-compose down -v
-
-# コンテナに入る
-docker-compose exec api bash
-docker-compose exec frontend sh
-```
-
 ### ローカル環境で開発する場合
 
-#### FastAPI (バックエンド)
+#### Next.js の起動
 
 ```bash
-cd FastAPI
-
-# 仮想環境の作成と有効化
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# 依存関係のインストール
-pip install -r requirements.txt
-
-# Prisma Clientの生成
-prisma generate
-
-# データベースマイグレーション
-prisma db push
-
-# 開発サーバーの起動
-uvicorn main:app --reload
-```
-
-#### Next.js (フロントエンド)
-
-```bash
-cd next
-
 # 依存関係のインストール
 npm install
 
 # 開発サーバーの起動
 npm run dev
+
+# 本番ビルド
+npm run build
+
+# 本番サーバーの起動
+npm start
+
+# Lint チェック
+npm run lint
 ```
 
-### データベース操作
-
-#### Prisma マイグレーション
+### Docker を使用する場合
 
 ```bash
-# FastAPIコンテナに入る
-docker-compose exec api bash
+# イメージをビルドして起動
+docker-compose -f docker/docker-compose.yml up --build
 
-# スキーマをデータベースに適用
-prisma db push
+# バックグラウンドで起動
+docker-compose -f docker/docker-compose.yml up -d
 
-# マイグレーションファイルを作成
-prisma migrate dev --name migration_name
+# ログの確認
+docker-compose -f docker/docker-compose.yml logs -f
 
-# Prisma Studioでデータを確認
-prisma studio
+# コンテナの停止
+docker-compose -f docker/docker-compose.yml down
+
+# コンテナに入る
+docker-compose -f docker/docker-compose.yml exec web sh
 ```
 
 ## 🔄 GraphQL 使用方法
 
-### フロントエンド (Next.js) から GraphQL を使用
+### GraphQL クライアントの設定
 
-**urql** を使用して FastAPI の GraphQL エンドポイントにアクセスします。
+**urql** を使用してGraphQLエンドポイントにアクセスします（SSR対応）。
 
-#### 設定
+#### 設定ファイル
 
-- エンドポイント: `http://localhost:8000/graphql`
-- 設定ファイル: `next/src/lib/graphql/urqlClient.ts`
+- 設定: `src/lib/graphql/urqlClient.ts`
+- ドキュメント: `src/lib/graphql/graphql.md`
 
 #### 使用例
 
@@ -234,7 +195,7 @@ const USERS_QUERY = `
     users {
       id
       email
-      username
+      name
     }
   }
 `
@@ -247,92 +208,159 @@ export default function UsersPage() {
 
   return (
     <div>
-      {result.data.users.map((user) => (
-        <div key={user.id}>{user.username}</div>
+      {result.data?.users.map((user) => (
+        <div key={user.id}>{user.name}</div>
       ))}
     </div>
   )
 }
 ```
 
-### バックエンド (FastAPI) での GraphQL 定義
+#### Server Component での使用
 
-#### スキーマ定義
+GraphQLクエリはServer Componentでも実行できます:
 
-`FastAPI/app/graphql/schemas/` にスキーマを定義:
+```typescript
+// src/app/users/page.tsx (Server Component)
+import { urqlClient } from '@/lib/graphql/urqlClient'
 
-```python
-# user_schema.py
-import strawberry
+export default async function UsersPage() {
+  const result = await urqlClient.query(USERS_QUERY, {}).toPromise()
 
-@strawberry.type
-class User:
-    id: str
-    email: str
-    username: str
-```
-
-#### リゾルバ定義
-
-`FastAPI/app/graphql/resolvers/queries/` にクエリを定義:
-
-```python
-from typing import List
-import strawberry
-from app.graphql.schemas.user_schema import User
-
-@strawberry.type
-class Query:
-    @strawberry.field
-    async def users(self) -> List[User]:
-        # データベースからユーザーを取得
-        return []
-```
-
-## 🔧 API 開発
-
-### REST API エンドポイントの追加
-
-1. `FastAPI/app/api/` に新しいルーターファイルを作成
-2. `FastAPI/app/api/__init__.py` でルーターを登録
-
-#### 例: ユーザーエンドポイント
-
-```python
-# app/api/users.py
-from fastapi import APIRouter
-
-router = APIRouter(prefix="/users", tags=["users"])
-
-@router.get("/")
-async def get_users():
-    return {"users": []}
-
-@router.post("/")
-async def create_user(user_data: dict):
-    return {"user": user_data}
-```
-
-### Prisma スキーマの編集
-
-`FastAPI/prisma/schema.prisma` を編集してモデルを追加:
-
-```prisma
-model Product {
-  id        String   @id @default(uuid())
-  name      String
-  price     Float
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("products")
+  return (
+    <div>
+      {result.data?.users.map((user) => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+    </div>
+  )
 }
 ```
 
-変更後:
+## 🗄️ Prisma の使用方法
+
+### スキーマ定義
+
+`src/lib/prisma/schema.prisma` を編集してモデルを定義します:
+
+```prisma
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Post {
+  id    Int     @id @default(autoincrement())
+  title String
+  content String?
+  userId Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("posts")
+}
+```
+
+### マイグレーション
 
 ```bash
-docker-compose exec api prisma db push
-docker-compose exec api prisma generate
+# マイグレーションを作成して実行
+npx prisma migrate dev --name add_users
+
+# スキーマをデータベースに適用（マイグレーションファイルなし）
+npx prisma db push
+
+# マイグレーション履歴を確認
+npx prisma migrate status
+
+# 特定のマイグレーションにロールバック
+npx prisma migrate resolve --rolled-back <migration_name>
+```
+
+### データ操作
+
+API ルート (`src/app/api`) でPrismaを使用してデータを操作:
+
+```typescript
+// src/app/api/users/route.ts
+import { PrismaClient } from '@prisma/client'
+import { NextRequest, NextResponse } from 'next/server'
+
+const prisma = new PrismaClient()
+
+export async function GET() {
+  const users = await prisma.user.findMany()
+  return NextResponse.json(users)
+}
+
+export async function POST(request: NextRequest) {
+  const data = await request.json()
+  const user = await prisma.user.create({
+    data,
+  })
+  return NextResponse.json(user, { status: 201 })
+}
+```
+
+### Prisma Studio でデータ確認
+
+```bash
+# Prisma Studio を起動
+npx prisma studio
+
+# ブラウザで http://localhost:5555 にアクセス
+```
+
+## 🗄️ データベース操作
+
+### PostgreSQL の起動 (ローカル環境)
+
+PostgreSQL がインストールされている場合:
+
+```bash
+# Windows
+# PostgreSQL サービスを起動
+
+# macOS / Linux
+brew services start postgresql
+# または
+sudo service postgresql start
+```
+
+### Docker で PostgreSQL を起動
+
+```bash
+# Docker で PostgreSQL を実行
+docker run --name postgres -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres:16
+
+# コンテナの停止
+docker stop postgres
+
+# コンテナの削除
+docker rm postgres
+```
+
+### データベースのリセット
+
+```bash
+# マイグレーションをリセット（全データ削除）
+npx prisma migrate reset
+
+# 確認プロンプトをスキップ
+npx prisma migrate reset --force
 ```
 
 ## 🔧 運用方法
@@ -340,152 +368,166 @@ docker-compose exec api prisma generate
 ### 新しいプロジェクトの開始手順
 
 1. **フォルダのコピー**
-
    ```bash
-   cp -r next-python my-new-project
+   cp -r next my-new-project
    cd my-new-project
    ```
 
 2. **環境変数の設定**
-
-   - `.env.example` を `.env` にコピー
-   - `FastAPI/.env.example` を `FastAPI/.env` にコピー
-   - `next/.env.example` を `next/.env` にコピー
-   - 必要に応じて値を変更
-
-3. **Docker 起動**
-
    ```bash
-   docker-compose up --build
+   cp .env.example .env.local
+   # .env.local を編集
    ```
 
-4. **データベース初期化**
-
+3. **依存パッケージをインストール**
    ```bash
-   docker-compose exec api prisma db push
+   npm install
+   ```
+
+4. **Prisma をセットアップ**
+   ```bash
+   npx prisma init
+   npx prisma migrate dev --name init
    ```
 
 5. **開発開始**
-   - フロントエンド: http://localhost:3000
-   - API: http://localhost:8000/docs
+   ```bash
+   npm run dev
+   # http://localhost:3000 にアクセス
+   ```
 
-### プロジェクト名の変更
-
-- `FastAPI/.env`: `APP_NAME` を変更
-- `next/package.json`: `name` フィールドを変更
-- コンテナ名を変更したい場合は `docker-compose.yml` を編集
-
-## ⚠️ 注意点
-
-### 1. Docker 使用時
-
-- **ホットリロード**: ボリュームマウントにより、コード変更が自動で反映されます
-- **ポート競合**: 3000, 8000, 5432 番ポートが使用可能であることを確認
-- **初回ビルド**: 初回は依存関係のダウンロードで時間がかかります
-
-### 2. データベース
-
-- **PostgreSQL**: コンテナの PostgreSQL を使用（ローカルに PostgreSQL は不要）
-- **データ永続化**: `postgres_data` ボリュームにデータが保存されます
-- **リセット**: `docker-compose down -v` でデータも削除されます
-
-### 3. GraphQL
-
-- **エンドポイント**: FastAPI が `/graphql` で GraphQL を提供
-- **Next.js からアクセス**: urql を使用して CSR でアクセス
-- **スキーマ確認**: http://localhost:8000/graphql で Playground にアクセス
-
-### 4. 環境変数
-
-- `.env`ファイルは Git にコミットしない（`.gitignore`に含まれています）
-- `NEXT_PUBLIC_`プレフィックス: Next.js でクライアント側から参照可能
-- FastAPI の環境変数はコンテナ内でのみ使用
-
-### 5. 依存関係の管理
-
-#### Python (FastAPI)
-
-- `requirements.txt` を編集後、コンテナを再ビルド
-- 不要なパッケージ(Redis, Celery 等)は削除済み
-
-#### Node.js (Next.js)
-
-- `package.json` を編集後、`npm install` 実行
-- Prisma は使用しない（FastAPI 側で Prisma を使用）
-
-### 6. 本番環境へのデプロイ
+### 本番環境へのデプロイ
 
 本番環境では以下を変更してください:
 
-- `DEBUG=False` に設定
-- `SECRET_KEY` を強力なランダム文字列に変更
-- `ALLOWED_ORIGINS` を本番ドメインに設定
-- PostgreSQL のパスワードを変更
-- `docker-compose.yml` の `command` を本番用に変更
+- `NODE_ENV=production` に設定
+- `NEXT_PUBLIC_GRAPHQL_ENDPOINT` を本番のエンドポイントに変更
+- `DATABASE_URL` を本番のデータベースに変更
+- `npm run build` でプロダクションビルドを作成
+- `npm start` で本番サーバーを起動
+
+#### Vercel へのデプロイ
+
+```bash
+# Vercel CLI をインストール
+npm i -g vercel
+
+# デプロイ
+vercel
+```
+
+## ⚠️ 注意点
+
+### 1. 環境変数
+
+- `.env.local` ファイルはGitにコミットしない（`.gitignore`に含まれています）
+- `NEXT_PUBLIC_` プレフィックス: ブラウザ側から参照可能になります
+- サーバーサイドのみで使用する変数にはプレフィックスを付けない
+
+### 2. Prisma の使用
+
+- **スキーマは src/lib/prisma/schema.prisma に配置**
+- マイグレーションの実行前に必ずスキーマをバックアップしてください
+- ローカル開発と本番環境では異なる `DATABASE_URL` を使用してください
+
+### 3. GraphQL
+
+- **urql はSSR対応**：Server Component でもClient Component でも使用可能
+- GraphQLエンドポイントが外部にある場合は、CORS設定を確認してください
+
+### 4. Docker 使用時
+
+- ホットリロード: ボリュームマウントにより、コード変更が自動で反映されます
+- ポート競合: 3000 番ポートが使用可能であることを確認
+- 初回ビルド: 初回は依存関係のダウンロードで時間がかかります
+
+### 5. 依存関係の管理
+
+```bash
+# 依存関係を更新
+npm update
+
+# 新しいパッケージをインストール
+npm install <package-name>
+
+# 開発依存関係として追加
+npm install --save-dev <package-name>
+```
+
+### 6. パフォーマンス最適化
+
+- **Image の最適化**: `next/image` コンポーネントを使用
+- **Code Splitting**: Next.js が自動で行います
+- **Static Generation**: `generateStaticParams()` で静的ページを生成
 
 ## 📚 参考リンク
 
 ### フロントエンド
 
 - [Next.js ドキュメント](https://nextjs.org/docs)
+- [React ドキュメント](https://react.dev/)
 - [urql ドキュメント](https://formidable.com/open-source/urql/docs/)
 - [Redux Toolkit ドキュメント](https://redux-toolkit.js.org/)
 - [Tailwind CSS ドキュメント](https://tailwindcss.com/docs)
+- [TypeScript ドキュメント](https://www.typescriptlang.org/docs/)
 
-### バックエンド
+### データベース
 
-- [FastAPI ドキュメント](https://fastapi.tiangolo.com/)
-- [Strawberry GraphQL ドキュメント](https://strawberry.rocks/)
-- [Prisma (Python) ドキュメント](https://prisma-client-py.readthedocs.io/)
-- [Pydantic ドキュメント](https://docs.pydantic.dev/)
+- [Prisma ドキュメント](https://www.prisma.io/docs/)
+- [PostgreSQL ドキュメント](https://www.postgresql.org/docs/)
+
+### ツール
+
+- [Docker ドキュメント](https://docs.docker.com/)
+- [ESLint ドキュメント](https://eslint.org/)
 
 ## 🐛 トラブルシューティング
 
-### Docker コンテナが起動しない
+### Prisma クライアント生成エラー
 
 ```bash
-# キャッシュをクリアして再ビルド
-docker-compose down -v
-docker-compose build --no-cache
-docker-compose up
+# Prisma クライアントを再生成
+npx prisma generate
+
+# キャッシュをクリア
+rm -rf node_modules/.prisma
+npx prisma generate
 ```
 
-### FastAPI で Prisma エラー
+### GraphQL の接続エラー
+
+- `.env.local` の `NEXT_PUBLIC_GRAPHQL_ENDPOINT` が正しいか確認
+- GraphQL サーバーが起動しているか確認
+- CORS 設定を確認
+
+### ポート 3000 が使用中
 
 ```bash
-# コンテナに入る
-docker-compose exec api bash
+# 別のポート で起動
+npm run dev -- -p 3001
 
-# Prisma Clientを再生成
-prisma generate
-
-# データベーススキーマを適用
-prisma db push
-```
-
-### Next.js で urql の接続エラー
-
-- `.env`の`NEXT_PUBLIC_GRAPHQL_ENDPOINT`が正しいか確認
-- FastAPI コンテナが起動しているか確認: `docker-compose ps`
-- FastAPI の CORS 設定を確認: `FastAPI/.env`の`ALLOWED_ORIGINS`
-
-### ポート競合エラー
-
-```bash
-# 使用中のポートを確認
-# Windows
+# Windows: 使用中のプロセスを確認
 netstat -ano | findstr :3000
-netstat -ano | findstr :8000
-
-# 別のポートを使用する場合は .env を編集
 ```
 
 ### データベース接続エラー
 
-- PostgreSQL コンテナが起動しているか確認
-- `DATABASE_URL`の設定が正しいか確認
-- ヘルスチェックが完了するまで待つ
+```bash
+# DATABASE_URL の形式を確認
+# postgresql://user:password@localhost:5432/dbname
+
+# PostgreSQL が起動しているか確認
+# psql -U postgres -h localhost
+```
+
+### node_modules に関するエラー
+
+```bash
+# node_modules を削除して再インストール
+rm -rf node_modules package-lock.json
+npm install
+```
 
 ---
 
-質問や問題がある場合は、プロジェクトの issue を作成してください。
+質問や問題がある場合は、GitHubのissueを作成してください。
