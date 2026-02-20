@@ -1,4 +1,10 @@
-"""FastAPI Application Entry Point."""
+"""FastAPI Application Entry Point.
+
+このアプリケーションは以下をサポートしています:
+- REST API: /api/... エンドポイント
+- GraphQL: /graphql エンドポイント
+- ドキュメント: /docs (Swagger UI), /redoc (ReDoc)
+"""
 
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
@@ -18,13 +24,13 @@ from app.middleware.timing_middleware import TimingMiddleware
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan context manager for startup and shutdown events."""
-    # Startup
+    # Startup: Database connection
     await prisma.connect()
     print("✅ Database connected")
     
     yield
     
-    # Shutdown
+    # Shutdown: Database disconnection
     await prisma.disconnect()
     print("❌ Database disconnected")
 
@@ -33,7 +39,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    description="FastAPI Template with GraphQL, Prisma, and Best Practices",
+    description="FastAPI + GraphQL + Prisma Template",
     docs_url="/docs" if settings.DEBUG else None,
     redoc_url="/redoc" if settings.DEBUG else None,
     openapi_url="/openapi.json" if settings.DEBUG else None,
@@ -65,7 +71,7 @@ app.include_router(graphql_app, prefix="/graphql")
 async def root() -> dict[str, str]:
     """Root endpoint."""
     return {
-        "message": "Welcome to FastAPI Template",
+        "message": "FastAPI + GraphQL + Prisma Template",
         "version": settings.APP_VERSION,
         "docs": "/docs",
         "graphql": "/graphql",
