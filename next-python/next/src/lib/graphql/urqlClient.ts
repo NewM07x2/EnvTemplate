@@ -1,3 +1,5 @@
+'use client';
+
 import { cacheExchange, createClient, fetchExchange, ssrExchange } from 'urql';
 
 const isServerSide = typeof window === 'undefined';
