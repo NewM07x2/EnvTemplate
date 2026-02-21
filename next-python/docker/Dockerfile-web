@@ -4,7 +4,7 @@ FROM node:18-alpine AS dependencies
 WORKDIR /app
 
 # package.json と package-lock.json をコピー
-COPY next/package*.json ./
+COPY web/package*.json ./
 
 # 依存関係をインストール
 RUN npm ci --prefer-offline --no-audit
@@ -22,7 +22,7 @@ ENV NODE_ENV=development \
 COPY --from=dependencies /app/node_modules ./node_modules
 
 # アプリケーションコードをコピー
-COPY next/ .
+COPY web/ .
 
 # ヘルスチェック
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \

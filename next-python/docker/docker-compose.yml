@@ -76,7 +76,7 @@ services:
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     volumes:
-      - ../next:/app
+      - ../web:/app
       - /app/node_modules
       - /app/.next
     depends_on:
