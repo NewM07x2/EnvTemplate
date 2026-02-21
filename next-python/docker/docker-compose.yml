@@ -40,7 +40,7 @@ services:
     ports:
       - "${API_PORT:-8000}:8000"
     volumes:
-      - ../FastAPI:/app
+      - ../api:/app
       - /app/__pycache__
       - /app/.pytest_cache
     depends_on:

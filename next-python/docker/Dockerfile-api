@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # requirements.txt をコピー
-COPY FastAPI/requirements.txt .
+COPY api/requirements.txt .
 
 # Python 依存関係をインストール
 RUN pip install --no-cache-dir -r requirements.txt
@@ -46,7 +46,7 @@ COPY --from=base /usr/local/bin /usr/local/bin
 COPY --from=base /app/requirements.txt .
 
 # アプリケーションコードをコピー
-COPY FastAPI/ .
+COPY api/ .
 
 # Prisma クライアントを生成（存在する場合）
 RUN if [ -f "prisma/schema.prisma" ]; then prisma generate; fi

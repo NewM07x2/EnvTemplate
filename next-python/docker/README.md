@@ -167,7 +167,7 @@ docker-compose ps
 - イメージ: Python 3.12 マルチステージビルド
 - コンテナ名: app-api
 - ポート: 8000
-- ボリューム: ../FastAPI:/app + キャッシュ除外
+- ボリューム: ../api:/app + キャッシュ除外
 - ヘルスチェック: curl http://localhost:8000/api/health
 - 依存: PostgreSQL (service_healthy)
 ```
