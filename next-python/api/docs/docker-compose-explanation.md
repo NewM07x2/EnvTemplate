@@ -1,6 +1,6 @@
 # docker-compose.yml 解説
 
-このドキュメントは、`python/FastAPI/docker-compose.yml` の内容を分かりやすく解説したものです。
+このドキュメントは、`next-python/api/docs/docker-compose.yml` の内容を分かりやすく解説したものです。
 
 ## 概要
 
