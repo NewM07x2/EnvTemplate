@@ -177,7 +177,7 @@ docker-compose ps
 - イメージ: Node 18-alpine マルチステージビルド
 - コンテナ名: app-web
 - ポート: 3000
-- ボリューム: ../next:/app + node_modules/.next 除外
+- ボリューム: ../web:/app + node_modules/.next 除外
 - ヘルスチェック: wget http://localhost:3000
 - 依存: FastAPI (service_started)
 ```
@@ -197,7 +197,7 @@ postgres_data:          # PostgreSQL データボリューム
 /app/__pycache__        # Python キャッシュ除外
 /app/.pytest_cache      # pytest キャッシュ除外
 
-../next:/app           # Next.js ソースコード（ホットリロード）
+../web:/app            # Next.js ソースコード（ホットリロード）
 /app/node_modules      # node_modules 除外
 /app/.next             # Next.js ビルド キャッシュ除外
 ```
@@ -546,7 +546,7 @@ A: デフォルトで有効です。ソースコードを変更すると自動�
 ```yaml
 volumes:
   - ../FastAPI:/app        # FastAPI ホットリロード
-  - ../next:/app          # Next.js ホットリロード
+  - ../web:/app          # Next.js ホットリロード
 ```
 
 ### Q: 複数環境（dev/staging/prod）を管理するには？
@@ -599,7 +599,7 @@ docker/
 ../
 ├── .env.example            # 環境変数テンプレート
 ├── FastAPI/                # FastAPI アプリケーション
-└── next/                   # Next.js アプリケーション
+└── web/                    # Next.js アプリケーション
 ```
 
 ## 統計情報
