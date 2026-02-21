@@ -32,7 +32,7 @@ GraphQL と Prisma をSSRで利用する FastAPI アプリケーション開発�
 ## 📁 プロジェクト構成
 
 ```
-FastAPI/
+api/
 ├── app/                        # アプリケーションコード
 │   ├── api/                    # REST API エンドポイント
 │   │   ├── __init__.py
