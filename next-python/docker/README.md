@@ -193,7 +193,7 @@ docker-compose ps
 
 ```yaml
 postgres_data:          # PostgreSQL データボリューム
-../FastAPI:/app         # FastAPI ソースコード（ホットリロード）
+../api:/app             # FastAPI ソースコード（ホットリロード）
 /app/__pycache__        # Python キャッシュ除外
 /app/.pytest_cache      # pytest キャッシュ除外
 
@@ -545,7 +545,7 @@ A: デフォルトで有効です。ソースコードを変更すると自動�
 
 ```yaml
 volumes:
-  - ../FastAPI:/app        # FastAPI ホットリロード
+  - ../api:/app        # FastAPI ホットリロード
   - ../web:/app          # Next.js ホットリロード
 ```
 
