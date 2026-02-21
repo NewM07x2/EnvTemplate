@@ -598,7 +598,7 @@ docker/
 
 ../
 ├── .env.example            # 環境変数テンプレート
-├── FastAPI/                # FastAPI アプリケーション
+├── api/                    # FastAPI アプリケーション
 └── web/                    # Next.js アプリケーション
 ```
 
