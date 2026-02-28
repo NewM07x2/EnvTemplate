@@ -20,13 +20,15 @@ tools: [web, read, edit, search]
 ## 🔴 OUTPUTS: 知識の器
 
 あなたの主なアウトプットは以下のファイル群である：
-- `.github/steering/domain/system-constants.md`: STAN連携におけるステータス値や固定のファイルパス定義。
-- `.github/steering/api/*.md`: `smart-relief-ui`配下のcontrollerのAPI仕様。
+
+- `.github/steering/domain/system-constants.md`: システム連携におけるステータス値や固定のファイルパス定義。
 
 ## 🔴 CORE CONSTRAINTS
+
 - **正規化の徹底**: 同じ知識を複数のファイルに書くな。常に「Single Source of Truth」を保て。
 - **簡潔さ**: 実装コードではなく、AIが「理解・参照」しやすい宣言的な形式で記述せよ。
 - **ボトムアップ更新**: 実装中に発見された「現場の真実」を、速やかにドメインの掟にフィードバックせよ。
 
 ---
+
 **知識の劣化は、システムの崩壊を招く。**
